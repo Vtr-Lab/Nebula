@@ -7,8 +7,10 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            /* Deep Black Background */
+            background-color: #000000;
+            /* Off-White Text for contrast */
+            color: #f0f0f0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,15 +20,22 @@
         }
         .container {
             text-align: center;
-            background: #1e1e1e;
+            /* Charcoal Gray Container */
+            background-color: #1a1a1a;
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            /* Soft shadow for depth */
+            box-shadow: 0 4px 20px rgba(230, 74, 25, 0.2); 
             width: 90%;
             max-width: 350px;
         }
+        h2 {
+            color: #ff8a65; /* Lighter orange for title */
+            margin-top: 0;
+        }
         button {
-            background-color: #007aff;
+            /* Vibrant Orange-Red */
+            background-color: #e64a19;
             color: white;
             border: none;
             padding: 15px 25px;
@@ -36,25 +45,45 @@
             cursor: pointer;
             width: 100%;
             margin: 10px 0;
-            transition: background 0.2s;
+            /* Smooth transition for hover effects */
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        button:hover {
+            background-color: #ff5722; /* Lighter orange-red on hover */
+            transform: translateY(-1px);
         }
         button:active {
-            background-color: #0056b3;
+            background-color: #bf360c; /* Darker red on click */
+            transform: translateY(1px);
         }
+        /* Specific styling for the Connect button */
         #connectBtn {
-            background-color: #34c759;
+            /* Amber color to stand out as a primary action */
+            background-color: #ff9800; 
+        }
+        #connectBtn:hover {
+            background-color: #ffb74d;
+        }
+        #connectBtn:active {
+            background-color: #f57c00;
         }
         #status {
             margin-top: 15px;
             font-size: 14px;
-            color: #aaa;
+            color: #b0bec5; /* Cool gray for status */
+        }
+        /* Class applied via JS when connected */
+        .connected {
+            color: #ffb74d !important; /* Bright Amber when connected */
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Nebula Controller</h2>
+        <h2>Nebula Control</h2>
         <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
         <button onclick="sendSignal('0')">Hollow Circle</button>
         <button onclick="sendSignal('1')">Solid Circle</button>
@@ -70,9 +99,12 @@
 
         async function connectBluetooth() {
             try {
-                document.getElementById('status').innerText = "Status: Scanning...";
+                const statusEl = document.getElementById('status');
+                const connectBtnEl = document.getElementById('connectBtn');
                 
-                // Filtering strictly by Service UUID ignores name-caching issues entirely
+                statusEl.innerText = "Status: Scanning...";
+                statusEl.classList.remove('connected');
+                
                 bluetoothDevice = await navigator.bluetooth.requestDevice({
                     filters: [{ services: [SERVICE_UUID] }]
                 });
@@ -81,12 +113,18 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bluetoothCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                document.getElementById('status').innerText = "Status: Connected!";
-                document.getElementById('connectBtn').innerText = "Connected";
-                document.getElementById('connectBtn').style.backgroundColor = "#555";
+                // Update UI for successful connection
+                statusEl.innerText = "Status: Connected!";
+                statusEl.classList.add('connected');
+                connectBtnEl.innerText = "Connected";
+                connectBtnEl.style.backgroundColor = "#666"; // Gray out connect button
+                connectBtnEl.onclick = null; // Disable reconnect button
+
             } catch (error) {
                 console.error(error);
-                document.getElementById('status').innerText = "Status: Connection Failed";
+                const statusEl = document.getElementById('status');
+                statusEl.innerText = "Status: Connection Failed";
+                statusEl.style.color = "#ef5350"; // Light red for error
             }
         }
 
