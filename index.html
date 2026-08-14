@@ -73,7 +73,7 @@
                 document.getElementById('status').innerText = "Status: Scanning...";
                 
                 bluetoothDevice = await navigator.bluetooth.requestDevice({
-                    filters: [{ name: 'ESP32_Nebule' }],
+                    filters: [{ name: 'ESP32_Nebula' }],
                     optionalServices: [SERVICE_UUID]
                 });
 
