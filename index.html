@@ -28,26 +28,26 @@
             width: 100%;
             max-width: 1200px;
             height: 100%;
-            max-height: 750px;
+            max-height: 780px;
             justify-content: center;
         }
         .container {
             text-align: center;
             background-color: #1a1a1a;
-            padding: 14px;
+            padding: 12px 14px;
             border-radius: 14px;
             box-shadow: 0 4px 25px rgba(230, 74, 25, 0.25);
             width: 100%;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            gap: 8px;
         }
         .panel-title {
             color: #ff8a65;
             font-size: 16px;
             font-weight: bold;
-            margin: 0 0 6px 0;
+            margin: 0;
         }
         button {
             background-color: #e64a19;
@@ -59,7 +59,7 @@
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            margin: 4px 0;
+            margin: 2px 0;
             transition: all 0.2s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             touch-action: none;
@@ -74,7 +74,7 @@
             background-color: #ff9800;
         }
         #status {
-            margin-top: 4px;
+            margin-top: 2px;
             font-size: 12px;
             color: #b0bec5;
         }
@@ -87,7 +87,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex-grow: 1;
             justify-content: center;
         }
         .slider-section label {
@@ -109,7 +108,7 @@
         .custom-slider-track {
             position: relative;
             width: 55px;
-            height: 310px;
+            height: 290px;
             background: #222;
             border-radius: 28px;
             cursor: pointer;
@@ -150,25 +149,22 @@
             box-sizing: border-box;
         }
         .turn-group {
-            margin-top: 2px;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-            justify-content: center;
         }
         .turn-group label {
             font-size: 13px;
             color: #ff8a65;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             font-weight: bold;
         }
         .turn-buttons {
             display: flex;
             gap: 12px;
             flex-direction: row;
-            height: 250px;
-            margin-bottom: 8px;
+            height: 230px;
+            margin-bottom: 4px;
         }
         .turn-buttons button {
             margin: 0;
@@ -196,13 +192,12 @@
         .quick-presets-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 4px;
+            gap: 6px;
         }
         .quick-btn {
             background-color: #2e7d32;
-            font-size: 14px;
-            padding: 14px 2px;
+            font-size: 13px;
+            padding: 10px 2px;
             margin: 0;
             border-radius: 8px;
             font-weight: bold;
@@ -215,21 +210,36 @@
         .presets-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
-            margin-top: 2px;
+            gap: 6px;
         }
         .preset-card {
             background-color: #222;
             border: 1px solid #444;
             border-radius: 6px;
-            padding: 3px;
+            padding: 4px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .preset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2px;
+            margin-bottom: 2px;
         }
         .preset-title {
             font-size: 10px;
             color: #ff8a65;
             font-weight: bold;
-            margin-bottom: 1px;
+        }
+        .preset-mode-tag {
+            font-size: 9px;
+            color: #b0bec5;
+            background: #111;
+            padding: 1px 4px;
+            border-radius: 3px;
         }
         .mini-grid {
             display: grid;
@@ -238,9 +248,9 @@
             background: #000;
             padding: 2px;
             border-radius: 3px;
-            margin: 0 auto 2px auto;
-            width: 30px;
-            height: 30px;
+            margin: 2px auto;
+            width: 36px;
+            height: 36px;
             cursor: pointer;
         }
         .mini-cell {
@@ -252,9 +262,9 @@
         }
         .btn-save {
             background-color: #c62828;
-            padding: 2px 2px;
+            padding: 3px 2px;
             font-size: 9px;
-            margin: 0;
+            margin: 2px 0 0 0;
             border-radius: 3px;
             width: 100%;
         }
@@ -265,9 +275,9 @@
             background: #111;
             padding: 4px;
             border-radius: 8px;
-            margin: 2px auto;
-            width: 180px;
-            height: 180px;
+            margin: 0 auto;
+            width: 160px;
+            height: 160px;
         }
         .matrix-cell {
             background-color: #262626;
@@ -283,7 +293,6 @@
         .controls-row {
             display: flex;
             gap: 8px;
-            margin: 2px 0;
             align-items: center;
             justify-content: space-between;
         }
@@ -319,15 +328,17 @@
 
             <div class="controls-row">
                 <select id="animMode" onchange="saveCurrentState()">
-                    <option value="static">Static Display</option>
-                    <option value="blink">Blinking Display</option>
-                    <option value="refresh">Refresh (Sweep)</option>
-                    <option value="pulse">Pulse Animation</option>
+                    <option value="static">Static</option>
+                    <option value="blink">Flash (Blink)</option>
+                    <option value="refresh">Sweep (Refresh)</option>
+                    <option value="pulse">Pulse</option>
+                    <option value="inside-out">Inside Out</option>
+                    <option value="outside-in">Outside In</option>
                 </select>
-                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 5px 10px; margin:0;">Clear</button>
+                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 6px 12px; margin:0;">Clear</button>
             </div>
 
-            <label style="font-size: 10px; color: #b0bec5; display: block; margin: 0; font-weight: bold; line-height: 1;">Save Presets:</label>
+            <div style="font-size: 11px; color: #ff8a65; font-weight: bold; text-align: left; margin-top: 2px;">Save Presets:</div>
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
@@ -341,7 +352,7 @@
                     <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
                 </div>
 
-                <label style="margin-top: 8px;">Quick Presets (1-6)</label>
+                <label style="margin-top: 6px;">Quick Presets (1-6)</label>
                 <div class="quick-presets-grid">
                     <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
                     <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="padding:1px 4px;">[2]</span></button>
@@ -377,6 +388,8 @@
         let bluetoothDevice;
         let bluetoothCharacteristic;
         let activeAnimationInterval = null;
+        let previewInterval = null;
+        let animTick = 0;
 
         const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
         const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a6";
@@ -399,6 +412,21 @@
             localStorage.setItem('nebula_matrix', JSON.stringify(matrixData));
             localStorage.setItem('nebula_mode', document.getElementById('animMode').value);
             localStorage.setItem('nebula_presets', JSON.stringify(presets));
+        }
+
+        function getRotatedPattern(pattern) {
+            let rotated = Array(64).fill(false);
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    if (pattern[r * 8 + c]) {
+                        // 180 degrees total rotation
+                        let new_r = 7 - r;
+                        let new_c = 7 - c;
+                        rotated[new_r * 8 + new_c] = true;
+                    }
+                }
+            }
+            return rotated;
         }
 
         function buildGrid() {
@@ -429,6 +457,18 @@
             }
         }
 
+        function getModeDisplayName(mode) {
+            switch(mode) {
+                case 'static': return 'Static';
+                case 'blink': return 'Flash';
+                case 'refresh': return 'Sweep';
+                case 'pulse': return 'Pulse';
+                case 'inside-out': return 'Inside-Out';
+                case 'outside-in': return 'Outside-In';
+                default: return 'Static';
+            }
+        }
+
         function buildPresetUI() {
             const container = document.getElementById('presetsContainer');
             container.innerHTML = '';
@@ -437,13 +477,24 @@
                 const card = document.createElement('div');
                 card.className = 'preset-card';
 
+                const header = document.createElement('div');
+                header.className = 'preset-header';
+
                 const title = document.createElement('div');
                 title.className = 'preset-title';
                 title.innerText = `Slot ${i + 1}`;
-                card.appendChild(title);
+                header.appendChild(title);
+
+                const modeTag = document.createElement('div');
+                modeTag.className = 'preset-mode-tag';
+                modeTag.innerText = getModeDisplayName(presets[i].mode);
+                header.appendChild(modeTag);
+
+                card.appendChild(header);
 
                 const miniGrid = document.createElement('div');
                 miniGrid.className = 'mini-grid';
+                miniGrid.id = `miniGrid-${i}`;
                 for (let p = 0; p < 64; p++) {
                     const miniCell = document.createElement('div');
                     miniCell.className = 'mini-cell' + (presets[i].pattern[p] ? ' active' : '');
@@ -466,6 +517,56 @@
 
                 container.appendChild(card);
             }
+            updateMiniGridPreviews();
+        }
+
+        function updateMiniGridPreviews() {
+            if (previewInterval) clearInterval(previewInterval);
+            
+            previewInterval = setInterval(() => {
+                animTick++;
+                for (let i = 0; i < 6; i++) {
+                    const gridEl = document.getElementById(`miniGrid-${i}`);
+                    if (!gridEl) continue;
+                    const cells = gridEl.children;
+                    const p = presets[i];
+                    const rotated = getRotatedPattern(p.pattern);
+
+                    for (let r = 0; r < 8; r++) {
+                        for (let c = 0; c < 8; c++) {
+                            let idx = r * 8 + c;
+                            let cellEl = cells[idx];
+                            if (!cellEl) continue;
+                            
+                            let baseActive = rotated[idx];
+                            let active = baseActive;
+
+                            if (p.mode === 'blink') {
+                                active = baseActive && (Math.floor(animTick / 3) % 2 === 0);
+                            } else if (p.mode === 'pulse') {
+                                active = baseActive && (Math.floor(animTick / 2) % 2 === 0);
+                            } else if (p.mode === 'refresh') {
+                                let sweepRow = animTick % 8;
+                                active = baseActive && (r === sweepRow);
+                            } else if (p.mode === 'inside-out') {
+                                let dist = Math.min(r, c, 7 - r, 7 - c); // 0 (edge) to 3 (center)
+                                let step = (animTick % 4); // 0 to 3
+                                active = baseActive && (dist >= (3 - step));
+                            } else if (p.mode === 'outside-in') {
+                                let dist = Math.min(r, c, 7 - r, 7 - c); // 0 (edge) to 3 (center)
+                                let step = (animTick % 4); // 0 to 3
+                                active = baseActive && (dist <= step);
+                            }
+
+                            if (active) {
+                                cellEl.classList.add('active');
+                            } else {
+                                cellEl.classList.remove('active');
+                            }
+                        }
+                    }
+                }
+            }, 150);
         }
 
         function clearMatrix() {
@@ -677,15 +778,16 @@
                 }
             }
 
-            let getRowBytes = (customPattern) => {
+            let getRowBytesForMatrix = (customPattern, filterFn = null) => {
                 let rotated = Array(64).fill(false);
                 for (let r = 0; r < 8; r++) {
                     for (let c = 0; c < 8; c++) {
                         if (customPattern[r * 8 + c]) {
-                            // 180 degrees total rotation (another 90° clockwise rotation)
-                            let new_r = 7 - r;
-                            let new_c = 7 - c;
-                            rotated[new_r * 8 + new_c] = true;
+                            if (!filterFn || filterFn(r, c)) {
+                                let new_r = 7 - r;
+                                let new_c = 7 - c;
+                                rotated[new_r * 8 + new_c] = true;
+                            }
                         }
                     }
                 }
@@ -700,7 +802,7 @@
                 return rows;
             };
 
-            let baseRows = getRowBytes(pattern);
+            let baseRows = getRowBytesForMatrix(pattern);
             let emptyRows = [0, 0, 0, 0, 0, 0, 0, 0];
 
             if (mode === 'static') {
@@ -729,6 +831,28 @@
                 activeAnimationInterval = setInterval(async () => {
                     await sendRows(visible ? baseRows : emptyRows);
                     visible = !visible;
+                }, 150);
+            }
+            else if (mode === 'inside-out') {
+                let step = 0;
+                activeAnimationInterval = setInterval(async () => {
+                    let rows = getRowBytesForMatrix(pattern, (r, c) => {
+                        let dist = Math.min(r, c, 7 - r, 7 - c);
+                        return dist >= (3 - step);
+                    });
+                    await sendRows(rows);
+                    step = (step + 1) % 4;
+                }, 150);
+            }
+            else if (mode === 'outside-in') {
+                let step = 0;
+                activeAnimationInterval = setInterval(async () => {
+                    let rows = getRowBytesForMatrix(pattern, (r, c) => {
+                        let dist = Math.min(r, c, 7 - r, 7 - c);
+                        return dist <= step;
+                    });
+                    await sendRows(rows);
+                    step = (step + 1) % 4;
                 }, 150);
             }
         }
