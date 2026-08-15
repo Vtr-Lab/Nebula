@@ -351,12 +351,12 @@
 
                 <label style="margin-top: 15px;">Quick Display Presets (1-6)</label>
                 <div class="quick-presets-grid">
-                    <button class="quick-btn" onclick="loadPreset(1)">P1</button>
-                    <button class="quick-btn" onclick="loadPreset(2)">P2</button>
-                    <button class="quick-btn" onclick="loadPreset(3)">P3</button>
-                    <button class="quick-btn" onclick="loadPreset(4)">P4</button>
-                    <button class="quick-btn" onclick="loadPreset(5)">P5</button>
-                    <button class="quick-btn" onclick="loadPreset(6)">P6</button>
+                    <button class="quick-btn" onclick="playPreset(1)">P1</button>
+                    <button class="quick-btn" onclick="playPreset(2)">P2</button>
+                    <button class="quick-btn" onclick="playPreset(3)">P3</button>
+                    <button class="quick-btn" onclick="playPreset(4)">P4</button>
+                    <button class="quick-btn" onclick="playPreset(5)">P5</button>
+                    <button class="quick-btn" onclick="playPreset(6)">P6</button>
                 </div>
             </div>
         </div>
@@ -365,6 +365,7 @@
     <script>
         let bluetoothDevice;
         let bluetoothCharacteristic;
+        let activeAnimationInterval = null;
 
         const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
         const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a6";
@@ -567,61 +568,85 @@
             presets[index].mode = document.getElementById('animMode').value;
             buildPresetUI();
             saveCurrentState();
-            sendPresetPayload(presetId);
+            playPreset(presetId); // Play automatically upon saving
         }
 
-        function loadPreset(presetId) {
+        async function playPreset(presetId) {
             let index = presetId - 1;
             matrixData = [...presets[index].pattern];
             document.getElementById('animMode').value = presets[index].mode;
             buildGrid();
             saveCurrentState();
-            sendPresetPayload(presetId);
-        }
 
-        async function sendPresetPayload(presetId) {
-            let index = presetId - 1;
             const mode = presets[index].mode;
             const pattern = presets[index].pattern;
-            
-            let rotatedMatrix = Array(64).fill(false);
-            for (let r = 0; r < 8; r++) {
-                for (let c = 0; c < 8; c++) {
-                    if (pattern[r * 8 + c]) {
-                        let new_r = 7 - c;
-                        let new_c = r;
-                        rotatedMatrix[new_r * 8 + new_c] = true;
-                    }
+
+            if (activeAnimationInterval) {
+                clearInterval(activeAnimationInterval);
+                activeAnimationInterval = null;
+            }
+
+            async function sendRows(rowsArray) {
+                if (!bluetoothCharacteristic) return;
+                let payload = "R:" + rowsArray.join(',');
+                try {
+                    const encoder = new TextEncoder();
+                    await bluetoothCharacteristic.writeValue(encoder.encode(payload));
+                } catch (err) {
+                    console.error("Transmission error:", err);
                 }
             }
 
-            let rows = [];
-            for (let r = 0; r < 8; r++) {
-                let byteVal = 0;
-                for (let c = 0; c < 8; c++) {
-                    if (rotatedMatrix[r * 8 + c]) {
-                        byteVal |= (1 << (7 - c));
+            let getRowBytes = (customPattern) => {
+                let rotated = Array(64).fill(false);
+                for (let r = 0; r < 8; r++) {
+                    for (let c = 0; c < 8; c++) {
+                        if (customPattern[r * 8 + c]) {
+                            rotated[(7 - c) * 8 + r] = true;
+                        }
                     }
                 }
-                rows.push(byteVal);
+                let rows = [];
+                for (let r = 0; r < 8; r++) {
+                    let byteVal = 0;
+                    for (let c = 0; c < 8; c++) {
+                        if (rotated[r * 8 + c]) byteVal |= (1 << (7 - c));
+                    }
+                    rows.push(byteVal);
+                }
+                return rows;
+            };
+
+            let baseRows = getRowBytes(pattern);
+            let emptyRows = [0, 0, 0, 0, 0, 0, 0, 0];
+
+            if (mode === 'static') {
+                await sendRows(baseRows);
+            } 
+            else if (mode === 'blink') {
+                let state = true;
+                await sendRows(baseRows);
+                activeAnimationInterval = setInterval(async () => {
+                    await sendRows(state ? emptyRows : baseRows);
+                    state = !state;
+                }, 500);
+            } 
+            else if (mode === 'refresh') {
+                let sweepRow = 0;
+                activeAnimationInterval = setInterval(async () => {
+                    let frame = [...emptyRows];
+                    frame[sweepRow] = baseRows[sweepRow];
+                    await sendRows(frame);
+                    sweepRow++;
+                    if (sweepRow > 7) sweepRow = 0;
+                }, 100);
             }
-
-            let modeFlag = '0';
-            if (mode === 'blink') modeFlag = '1';
-            else if (mode === 'refresh') modeFlag = '2';
-            else if (mode === 'pulse') modeFlag = '3';
-
-            let payload = `P${presetId}:${modeFlag}:` + rows.join(',');
-
-            if (!bluetoothCharacteristic) {
-                return;
-            }
-
-            try {
-                const encoder = new TextEncoder();
-                await bluetoothCharacteristic.writeValue(encoder.encode(payload));
-            } catch (error) {
-                console.error("Error sending preset data: ", error);
+            else if (mode === 'pulse') {
+                let visible = true;
+                activeAnimationInterval = setInterval(async () => {
+                    await sendRows(visible ? baseRows : emptyRows);
+                    visible = !visible;
+                }, 150);
             }
         }
 
