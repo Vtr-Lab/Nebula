@@ -28,7 +28,7 @@
             width: 100%;
             max-width: 1200px;
             height: 100%;
-            max-height: 780px;
+            max-height: 820px;
             justify-content: center;
         }
         .container {
@@ -41,13 +41,15 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
             gap: 8px;
         }
         .panel-title {
             color: #ff8a65;
             font-size: 16px;
             font-weight: bold;
-            margin: 0;
+            margin: 0 0 4px 0;
         }
         button {
             background-color: #e64a19;
@@ -88,6 +90,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
         }
         .slider-section label {
             font-size: 13px;
@@ -151,6 +154,8 @@
         .turn-group {
             display: flex;
             flex-direction: column;
+            width: 100%;
+            align-items: center;
         }
         .turn-group label {
             font-size: 13px;
@@ -163,8 +168,9 @@
             display: flex;
             gap: 12px;
             flex-direction: row;
-            height: 230px;
-            margin-bottom: 4px;
+            height: 180px;
+            margin-bottom: 8px;
+            width: 100%;
         }
         .turn-buttons button {
             margin: 0;
@@ -191,8 +197,9 @@
         }
         .quick-presets-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 6px;
+            width: 100%;
         }
         .quick-btn {
             background-color: #2e7d32;
@@ -206,11 +213,13 @@
             align-items: center;
             justify-content: center;
             gap: 2px;
+            width: 100%;
         }
         .presets-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 6px;
+            width: 100%;
         }
         .preset-card {
             background-color: #222;
@@ -249,8 +258,8 @@
             padding: 2px;
             border-radius: 3px;
             margin: 2px auto;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
         }
         .mini-cell {
@@ -276,8 +285,8 @@
             padding: 4px;
             border-radius: 8px;
             margin: 0 auto;
-            width: 160px;
-            height: 160px;
+            width: 140px;
+            height: 140px;
         }
         .matrix-cell {
             background-color: #262626;
@@ -295,6 +304,7 @@
             gap: 8px;
             align-items: center;
             justify-content: space-between;
+            width: 100%;
         }
         select {
             background: #262626;
@@ -338,7 +348,7 @@
                 <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 6px 12px; margin:0;">Clear</button>
             </div>
 
-            <div style="font-size: 11px; color: #ff8a65; font-weight: bold; text-align: left; margin-top: 2px;">Save Presets:</div>
+            <div style="font-size: 11px; color: #ff8a65; font-weight: bold; text-align: left; width: 100%; margin-top: 2px;">Save Presets:</div>
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
@@ -366,7 +376,7 @@
 
         <!-- 3. RIGHT PANEL: Nebula Control & Throttle Slider -->
         <div class="container">
-            <div>
+            <div style="width: 100%;">
                 <h2 class="panel-title">Nebula Control</h2>
                 <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
                 <div id="status">Status: Disconnected</div>
@@ -419,7 +429,6 @@
             for (let r = 0; r < 8; r++) {
                 for (let c = 0; c < 8; c++) {
                     if (pattern[r * 8 + c]) {
-                        // 180 degrees total rotation
                         let new_r = 7 - r;
                         let new_c = 7 - c;
                         rotated[new_r * 8 + new_c] = true;
@@ -549,12 +558,12 @@
                                 let sweepRow = animTick % 8;
                                 active = baseActive && (r === sweepRow);
                             } else if (p.mode === 'inside-out') {
-                                let dist = Math.min(r, c, 7 - r, 7 - c); // 0 (edge) to 3 (center)
-                                let step = (animTick % 4); // 0 to 3
+                                let dist = Math.min(r, c, 7 - r, 7 - c);
+                                let step = (animTick % 4);
                                 active = baseActive && (dist >= (3 - step));
                             } else if (p.mode === 'outside-in') {
-                                let dist = Math.min(r, c, 7 - r, 7 - c); // 0 (edge) to 3 (center)
-                                let step = (animTick % 4); // 0 to 3
+                                let dist = Math.min(r, c, 7 - r, 7 - c);
+                                let step = (animTick % 4);
                                 active = baseActive && (dist <= step);
                             }
 
@@ -650,9 +659,6 @@
             rightBtn.style.backgroundColor = '#37474f';
         });
 
-        // -------------------------------------------------------------
-        // KEYBOARD CONTROL HANDLER (WASD, Arrow Keys, Space, Presets 1-6)
-        // -------------------------------------------------------------
         const pressedKeys = new Set();
         const validKeys = [
             'Space', 'KeyW', 'KeyS', 'KeyA', 'KeyD', 
