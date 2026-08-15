@@ -24,8 +24,7 @@
             color: #ff8a65;
             font-size: 20px;
             font-weight: bold;
-            margin-top: 0;
-            margin-bottom: 15px;
+            margin: 0 0 10px 0;
         }
         /* 3-Column Horizontal Dashboard Layout */
         .dashboard {
@@ -33,23 +32,22 @@
             flex-direction: row;
             gap: 20px;
             justify-content: center;
-            max-width: 1300px;
+            max-width: 1250px;
             width: 100%;
             align-items: stretch;
         }
         .container {
             text-align: center;
             background-color: #1a1a1a;
-            padding: 20px;
+            padding: 16px;
             border-radius: 16px;
             box-shadow: 0 4px 25px rgba(230, 74, 25, 0.25);
             flex: 1;
             min-width: 340px;
-            max-width: 400px;
+            max-width: 390px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
         button {
             background-color: #e64a19;
@@ -80,7 +78,7 @@
             background-color: #ffb74d;
         }
         #status {
-            margin-top: 8px;
+            margin-top: 6px;
             font-size: 13px;
             color: #b0bec5;
         }
@@ -88,35 +86,37 @@
             color: #ffb74d !important;
             font-weight: bold;
         }
-        /* Horizontally Thick Vertical Spring-Return Slider */
+        /* Horizontally Thick & Long Vertical Spring-Return Slider */
         .slider-section {
-            margin: 10px 0;
+            margin: 15px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            flex-grow: 1;
+            justify-content: center;
         }
         .slider-section label {
             font-size: 14px;
             color: #ff8a65;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-weight: bold;
         }
         input[type=range].vertical {
             writing-mode: vertical-lr;
             direction: rtl;
-            width: 260px; /* Vertical height of the slider track */
-            height: 55px; /* Horizontal thickness of the slider track */
+            width: 330px; /* Vertical length of the slider */
+            height: 48px; /* Horizontal thickness of the slider */
             accent-color: #e64a19;
             background: #262626;
-            border-radius: 30px;
+            border-radius: 24px;
             cursor: pointer;
         }
         /* Turn Buttons Layout (Side-by-Side & Vertically Stretched) */
         .turn-group {
-            margin-top: 10px;
+            margin-top: 15px;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            flex-grow: 1;
             justify-content: center;
         }
         .turn-group label {
@@ -130,7 +130,7 @@
             display: flex;
             gap: 15px;
             flex-direction: row;
-            height: 140px; /* Stretches the button area vertically */
+            height: 180px; /* Vertically stretched button area */
         }
         .turn-buttons button {
             margin: 0;
@@ -143,7 +143,7 @@
         .turn-buttons button:hover {
             background-color: #455a64;
         }
-        /* 8x8 Matrix Grid Styling */
+        /* Restored Larger 8x8 Matrix Grid Drawing Board */
         .matrix-grid {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
@@ -151,11 +151,12 @@
             background: #111;
             padding: 8px;
             border-radius: 10px;
-            margin: 10px auto;
-            max-width: 240px;
+            margin: 6px auto;
+            width: 230px;
+            height: 230px;
+            flex-shrink: 0;
         }
         .matrix-cell {
-            aspect-ratio: 1;
             background-color: #262626;
             border: 1px solid #333;
             border-radius: 3px;
@@ -171,7 +172,7 @@
         .controls-row {
             display: flex;
             gap: 10px;
-            margin: 10px 0;
+            margin: 6px 0;
             align-items: center;
             justify-content: space-between;
         }
@@ -179,30 +180,30 @@
             background: #262626;
             color: white;
             border: 1px solid #444;
-            padding: 8px;
+            padding: 6px 8px;
             border-radius: 8px;
             width: 100%;
             font-size: 13px;
         }
         /* Presets Section */
         .presets-container {
-            margin-top: 10px;
+            margin-top: 4px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 6px;
         }
         .preset-card {
             background-color: #222;
             border: 1px solid #444;
-            border-radius: 10px;
-            padding: 6px;
+            border-radius: 8px;
+            padding: 4px;
             text-align: center;
         }
         .preset-title {
-            font-size: 11px;
+            font-size: 10px;
             color: #ff8a65;
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         /* Mini Preview Grid */
         .mini-grid {
@@ -211,10 +212,10 @@
             gap: 1px;
             background: #000;
             padding: 2px;
-            border-radius: 4px;
-            margin: 0 auto 6px auto;
-            width: 52px;
-            height: 52px;
+            border-radius: 3px;
+            margin: 0 auto 4px auto;
+            width: 44px;
+            height: 44px;
         }
         .mini-cell {
             background-color: #1a1a1a;
@@ -225,13 +226,13 @@
         }
         .preset-actions {
             display: flex;
-            gap: 4px;
+            gap: 3px;
         }
         .preset-actions button {
-            padding: 5px 2px;
+            padding: 3px 2px;
             font-size: 10px;
             margin: 0;
-            border-radius: 5px;
+            border-radius: 4px;
         }
         .btn-load {
             background-color: #2e7d32;
@@ -258,12 +259,11 @@
                 <div id="status">Status: Disconnected</div>
             </div>
 
-            <!-- Thick Vertical Spring-Return Slider (Defaults to 0) -->
+            <!-- Thick & Long Vertical Spring-Return Slider (Defaults to 0) -->
             <div class="slider-section">
                 <label>Throttle (Y): <span id="yVal">0</span></label>
                 <input type="range" id="sliderY" class="vertical" min="0" max="100" value="0" oninput="updateSliders()">
             </div>
-            <div></div> <!-- Spacer for flex alignment -->
         </div>
 
         <!-- 2. MIDDLE PANEL: 8x8 LED Matrix Designer & Presets -->
@@ -277,10 +277,10 @@
                     <option value="static">Static Display</option>
                     <option value="blink">Blinking Display</option>
                 </select>
-                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 12px; margin:0;">Clear</button>
+                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 6px 12px; margin:0;">Clear</button>
             </div>
 
-            <label style="font-size: 12px; color: #b0bec5; display: block; margin-top: 8px; font-weight: bold;">Preset Slots (Load / Save):</label>
+            <label style="font-size: 11px; color: #b0bec5; display: block; margin-top: 4px; font-weight: bold;">Preset Slots (Load / Save):</label>
             <div class="presets-container" id="presetsContainer">
                 <!-- Dynamically generated preset cards -->
             </div>
