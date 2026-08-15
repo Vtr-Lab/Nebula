@@ -10,71 +10,72 @@
             background-color: #000000;
             color: #f0f0f0;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
-            padding: 15px;
+            padding: 10px;
             box-sizing: border-box;
             user-select: none;
-            touch-action: manipulation;
-        }
-        .panel-title {
-            color: #ff8a65;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0 0 10px 0;
+            touch-action: none;
+            overflow: hidden;
         }
         .dashboard {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 12px;
             align-items: center;
             width: 100%;
-            max-width: 450px;
+            max-width: 1200px;
+            height: 100%;
+            max-height: 750px;
+            justify-content: center;
         }
         .container {
             text-align: center;
             background-color: #1a1a1a;
-            padding: 16px;
-            border-radius: 16px;
+            padding: 14px;
+            border-radius: 14px;
             box-shadow: 0 4px 25px rgba(230, 74, 25, 0.25);
             width: 100%;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+        }
+        .panel-title {
+            color: #ff8a65;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 0 8px 0;
         }
         button {
             background-color: #e64a19;
             color: white;
             border: none;
-            padding: 12px 16px;
-            font-size: 15px;
+            padding: 10px 14px;
+            font-size: 14px;
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            margin: 6px 0;
-            transition: all 0.3s ease;
+            margin: 4px 0;
+            transition: all 0.2s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            touch-action: none;
         }
         button:hover {
             background-color: #ff5722;
-            transform: translateY(-1px);
         }
         button:active {
             background-color: #bf360c;
-            transform: translateY(1px);
         }
         #connectBtn {
             background-color: #ff9800;
         }
-        #connectBtn:hover {
-            background-color: #ffb74d;
-        }
         #status {
-            margin-top: 6px;
-            font-size: 13px;
+            margin-top: 4px;
+            font-size: 12px;
             color: #b0bec5;
         }
         .connected {
@@ -82,7 +83,7 @@
             font-weight: bold;
         }
         .slider-section {
-            margin: 10px 0;
+            margin: 5px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -90,15 +91,15 @@
             justify-content: center;
         }
         .slider-section label {
-            font-size: 14px;
+            font-size: 13px;
             color: #ff8a65;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: bold;
         }
         .custom-slider-track {
             position: relative;
             width: 55px;
-            height: 310px;
+            height: 350px; /* Stretched vertically */
             background: #222;
             border-radius: 28px;
             cursor: pointer;
@@ -122,7 +123,6 @@
             right: 5px;
             border-radius: 4px;
             pointer-events: none;
-            transition: background-color 0.15s ease;
             z-index: 1;
         }
         .slider-thumb {
@@ -134,7 +134,6 @@
             border: 2px solid #ff8a65;
             border-radius: 18px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-            cursor: grab;
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: 3;
@@ -144,20 +143,22 @@
             margin-top: 5px;
             display: flex;
             flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
         }
         .turn-group label {
-            font-size: 14px;
+            font-size: 13px;
             color: #ff8a65;
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
         }
         .turn-buttons {
             display: flex;
             gap: 12px;
             flex-direction: row;
-            height: 120px; /* Increased vertical height */
-            margin-bottom: 10px;
+            height: 170px; /* Stretched vertically much more */
+            margin-bottom: 8px;
         }
         .turn-buttons button {
             margin: 0;
@@ -173,30 +174,27 @@
         .quick-presets-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 5px;
+            gap: 6px;
+            margin-top: 4px;
         }
         .quick-btn {
             background-color: #2e7d32;
-            font-size: 14px;
-            padding: 10px 4px;
+            font-size: 13px;
+            padding: 8px 2px;
             margin: 0;
-            border-radius: 8px;
-        }
-        .quick-btn:hover {
-            background-color: #388e3c;
+            border-radius: 6px;
         }
         .presets-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            margin-top: 6px;
+            margin-top: 4px;
         }
         .preset-card {
             background-color: #222;
             border: 1px solid #444;
             border-radius: 8px;
-            padding: 6px 4px;
+            padding: 4px;
             text-align: center;
         }
         .preset-title {
@@ -212,9 +210,9 @@
             background: #000;
             padding: 2px;
             border-radius: 3px;
-            margin: 0 auto 4px auto;
-            width: 36px;
-            height: 36px;
+            margin: 0 auto 3px auto;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
         }
         .mini-cell {
@@ -226,43 +224,38 @@
         }
         .btn-save {
             background-color: #c62828;
-            padding: 4px 2px;
+            padding: 3px 2px;
             font-size: 9px;
             margin: 0;
             border-radius: 4px;
             width: 100%;
         }
-        .btn-save:hover {
-            background-color: #d32f2f;
-        }
         .matrix-grid {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
-            gap: 4px;
+            gap: 3px;
             background: #111;
-            padding: 8px;
-            border-radius: 10px;
-            margin: 6px auto;
-            width: 230px;
-            height: 230px;
-            flex-shrink: 0;
+            padding: 6px;
+            border-radius: 8px;
+            margin: 4px auto;
+            width: 200px;
+            height: 200px;
         }
         .matrix-cell {
             background-color: #262626;
             border: 1px solid #333;
-            border-radius: 3px;
+            border-radius: 2px;
             cursor: pointer;
-            transition: background-color 0.05s;
         }
         .matrix-cell.active {
             background-color: #ff5722;
-            box-shadow: 0 0 6px #ff5722;
+            box-shadow: 0 0 5px #ff5722;
             border-color: #ff8a65;
         }
         .controls-row {
             display: flex;
-            gap: 10px;
-            margin: 6px 0;
+            gap: 8px;
+            margin: 4px 0;
             align-items: center;
             justify-content: space-between;
         }
@@ -270,30 +263,19 @@
             background: #262626;
             color: white;
             border: 1px solid #444;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 6px;
+            border-radius: 6px;
             width: 100%;
-            font-size: 13px;
+            font-size: 12px;
         }
-        @media (min-width: 1100px) {
-            body {
-                height: 100vh;
-                overflow: hidden;
-                justify-content: center;
-            }
+        @media (min-width: 900px) {
             .dashboard {
                 flex-direction: row;
-                justify-content: center;
                 align-items: stretch;
-                max-width: 1250px;
             }
             .container {
                 flex: 1;
-                min-width: 340px;
-                max-width: 390px;
-            }
-            .turn-buttons {
-                height: 140px; /* Increased vertical height for desktop */
+                max-width: 380px;
             }
         }
     </style>
@@ -329,13 +311,13 @@
                 <select id="animMode" onchange="saveCurrentState()">
                     <option value="static">Static Display</option>
                     <option value="blink">Blinking Display</option>
-                    <option value="refresh">Refresh (Sweep Row-by-Row)</option>
+                    <option value="refresh">Refresh (Sweep)</option>
                     <option value="pulse">Pulse Animation</option>
                 </select>
-                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 12px; margin:0;">Clear</button>
+                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 6px 10px; margin:0;">Clear</button>
             </div>
 
-            <label style="font-size: 11px; color: #b0bec5; display: block; margin-top: 6px; font-weight: bold;">Save Presets (Click preview to edit):</label>
+            <label style="font-size: 10px; color: #b0bec5; display: block; margin-top: 4px; font-weight: bold;">Save Presets:</label>
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
@@ -343,13 +325,13 @@
         <div class="container">
             <h3 class="panel-title">Steering & Quick Display</h3>
             <div class="turn-group">
-                <label>Turning Direction</label>
+                <label>Turning Direction (Multi-touch enabled)</label>
                 <div class="turn-buttons">
-                    <button onmousedown="sendTurn('LEFT')" ontouchstart="sendTurn('LEFT')">&#9664; Left</button>
-                    <button onmousedown="sendTurn('RIGHT')" ontouchstart="sendTurn('RIGHT')">Right &#9654;</button>
+                    <button id="leftBtn">&#9664; Left</button>
+                    <button id="rightBtn">Right &#9654;</button>
                 </div>
 
-                <label style="margin-top: 15px;">Quick Display Presets (1-6)</label>
+                <label style="margin-top: 10px;">Quick Presets (1-6)</label>
                 <div class="quick-presets-grid">
                     <button class="quick-btn" onclick="playPreset(1)">P1</button>
                     <button class="quick-btn" onclick="playPreset(2)">P2</button>
@@ -371,7 +353,6 @@
         const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a6";
 
         let matrixData = JSON.parse(localStorage.getItem('nebula_matrix')) || Array(64).fill(false);
-        
         let savedMode = localStorage.getItem('nebula_mode') || 'static';
         document.getElementById('animMode').value = savedMode;
 
@@ -380,12 +361,10 @@
             mode: 'static'
         }));
 
-        let isMouseDown = false;
+        let isDrawing = false;
         let targetPaintState = true;
 
-        document.addEventListener('mouseup', () => {
-            isMouseDown = false;
-        });
+        document.addEventListener('pointerup', () => { isDrawing = false; });
 
         function saveCurrentState() {
             localStorage.setItem('nebula_matrix', JSON.stringify(matrixData));
@@ -400,17 +379,17 @@
                 const cell = document.createElement('div');
                 cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
                 
-                cell.onmousedown = (e) => {
+                cell.onpointerdown = (e) => {
                     e.preventDefault();
-                    isMouseDown = true;
+                    isDrawing = true;
                     targetPaintState = !matrixData[i];
                     matrixData[i] = targetPaintState;
                     cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
                     saveCurrentState();
                 };
 
-                cell.onmouseenter = () => {
-                    if (isMouseDown) {
+                cell.onpointerenter = () => {
+                    if (isDrawing) {
                         matrixData[i] = targetPaintState;
                         cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
                         saveCurrentState();
@@ -466,7 +445,7 @@
             saveCurrentState();
         }
 
-        let currentThrottle = 0;
+        // Throttle Slider setup with Pointer Events (Multi-touch safe)
         const track = document.getElementById('sliderTrack');
         const fill = document.getElementById('sliderFill');
         const thumb = document.getElementById('sliderThumb');
@@ -493,51 +472,71 @@
             }
         }
 
-        function setThrottleFromEvent(e) {
+        function handleSliderMove(e) {
             const rect = track.getBoundingClientRect();
-            const clientY = e.clientY !== undefined ? e.clientY : (e.touches ? e.touches[0].clientY : rect.top);
-            
+            let clientY = e.clientY;
             let offsetY = clientY - rect.top;
             offsetY = Math.max(0, Math.min(rect.height, offsetY));
 
             let percentVal = Math.round(100 - (offsetY / rect.height) * 100);
-            currentThrottle = percentVal;
             updateSliderVisuals(percentVal);
         }
 
-        let isDragging = false;
-
         track.addEventListener('pointerdown', (e) => {
-            isDragging = true;
-            setThrottleFromEvent(e);
+            e.preventDefault();
+            track.setPointerCapture(e.pointerId);
+            handleSliderMove(e);
+            
+            track.onpointermove = (ev) => handleSliderMove(ev);
+            track.onpointerup = (ev) => {
+                track.releasePointerCapture(ev.pointerId);
+                track.onpointermove = null;
+                track.onpointerup = null;
+                updateSliderVisuals(50);
+            };
         });
-
-        track.addEventListener('pointermove', (e) => {
-            if (!isDragging) return;
-            setThrottleFromEvent(e);
-        });
-
-        function releaseSlider(e) {
-            if (!isDragging) return;
-            isDragging = false;
-            currentThrottle = 50;
-            updateSliderVisuals(50);
-        }
-
-        track.addEventListener('pointerup', releaseSlider);
-        track.addEventListener('pointercancel', releaseSlider);
 
         updateSliderVisuals(50);
 
-        function sendTurn(direction) {
-            console.log("Turn Command:", direction);
-        }
+        // Multi-touch Steering Buttons
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+
+        leftBtn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            leftBtn.setPointerCapture(e.pointerId);
+            console.log("Turn Command: LEFT");
+            leftBtn.style.backgroundColor = '#1e88e5';
+        });
+        leftBtn.addEventListener('pointerup', (e) => {
+            leftBtn.releasePointerCapture(e.pointerId);
+            leftBtn.style.backgroundColor = '#37474f';
+        });
+
+        rightBtn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            rightBtn.setPointerCapture(e.pointerId);
+            console.log("Turn Command: RIGHT");
+            rightBtn.style.backgroundColor = '#1e88e5';
+        });
+        rightBtn.addEventListener('pointerup', (e) => {
+            rightBtn.releasePointerCapture(e.pointerId);
+            rightBtn.style.backgroundColor = '#37474f';
+        });
 
         async function connectBluetooth() {
+            const statusEl = document.getElementById('status');
+            const connectBtnEl = document.getElementById('connectBtn');
+
+            // Check if Web Bluetooth is supported by the browser (Safari iOS missing support)
+            if (!navigator.bluetooth) {
+                statusEl.innerText = "Status: Bluetooth unsupported on iOS Safari!";
+                statusEl.style.color = "#ef5350";
+                alert("Web Bluetooth is not natively supported in Safari on iPad/iOS. Please open this page using an iOS Web BLE browser app from the App Store (such as 'Bluefy' or 'BLE Link') to connect to your ESP32.");
+                return;
+            }
+
             try {
-                const statusEl = document.getElementById('status');
-                const connectBtnEl = document.getElementById('connectBtn');
-                
                 statusEl.innerText = "Status: Scanning...";
                 statusEl.classList.remove('connected');
                 
@@ -555,7 +554,6 @@
                 connectBtnEl.style.backgroundColor = "#555";
             } catch (error) {
                 console.error(error);
-                const statusEl = document.getElementById('status');
                 statusEl.innerText = "Status: Connection Failed";
                 statusEl.style.color = "#ef5350";
             }
