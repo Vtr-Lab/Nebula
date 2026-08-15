@@ -7,87 +7,183 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            /* Deep Black Background */
             background-color: #000000;
-            /* Off-White Text for contrast */
             color: #f0f0f0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            justify-content: flex-start;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
         .container {
             text-align: center;
-            /* Charcoal Gray Container */
             background-color: #1a1a1a;
-            padding: 30px;
+            padding: 25px;
             border-radius: 16px;
-            /* Soft shadow for depth */
-            box-shadow: 0 4px 20px rgba(230, 74, 25, 0.2); 
+            box-shadow: 0 4px 20px rgba(230, 74, 25, 0.2);
             width: 90%;
-            max-width: 350px;
+            max-width: 400px;
+            margin-bottom: 20px;
         }
-        h2 {
-            color: #ff8a65; /* Lighter orange for title */
+        h2, h3 {
+            color: #ff8a65;
             margin-top: 0;
         }
         button {
-            /* Vibrant Orange-Red */
             background-color: #e64a19;
             color: white;
             border: none;
-            padding: 15px 25px;
-            font-size: 16px;
+            padding: 12px 20px;
+            font-size: 15px;
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
-            margin: 10px 0;
-            /* Smooth transition for hover effects */
+            margin: 8px 0;
             transition: all 0.3s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
         button:hover {
-            background-color: #ff5722; /* Lighter orange-red on hover */
+            background-color: #ff5722;
             transform: translateY(-1px);
         }
         button:active {
-            background-color: #bf360c; /* Darker red on click */
+            background-color: #bf360c;
             transform: translateY(1px);
         }
-        /* Specific styling for the Connect button */
         #connectBtn {
-            /* Amber color to stand out as a primary action */
-            background-color: #ff9800; 
+            background-color: #ff9800;
         }
         #connectBtn:hover {
             background-color: #ffb74d;
         }
-        #connectBtn:active {
-            background-color: #f57c00;
-        }
         #status {
-            margin-top: 15px;
+            margin-top: 10px;
             font-size: 14px;
-            color: #b0bec5; /* Cool gray for status */
+            color: #b0bec5;
         }
-        /* Class applied via JS when connected */
         .connected {
-            color: #ffb74d !important; /* Bright Amber when connected */
+            color: #ffb74d !important;
             font-weight: bold;
+        }
+        /* Slider styling */
+        .slider-group {
+            margin: 15px 0;
+            text-align: left;
+        }
+        .slider-group label {
+            font-size: 13px;
+            color: #ff8a65;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type=range] {
+            width: 100%;
+            accent-color: #e64a19;
+            background: #333;
+            border-radius: 5px;
+        }
+        /* 8x8 Matrix Grid Styling */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            background: #111;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px auto;
+            max-width: 280px;
+        }
+        .matrix-cell {
+            aspect-ratio: 1;
+            background-color: #262626;
+            border: 1px solid #333;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        .matrix-cell.active {
+            background-color: #ff5722;
+            box-shadow: 0 0 6px #ff5722;
+            border-color: #ff8a65;
+        }
+        /* Mode selector & Presets */
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            align-items: center;
+            justify-content: space-between;
+        }
+        select {
+            background: #262626;
+            color: white;
+            border: 1px solid #444;
+            padding: 8px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 14px;
+        }
+        .presets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .preset-btn {
+            background-color: #2d2d2d;
+            border: 1px solid #444;
+            font-size: 13px;
+            padding: 10px 5px;
+        }
+        .preset-btn:hover {
+            background-color: #e64a19;
         }
     </style>
 </head>
 <body>
 
+    <!-- Connection & Movement Controls -->
     <div class="container">
         <h2>Nebula Control</h2>
         <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
-        <button onclick="sendSignal('0')">Hollow Circle</button>
-        <button onclick="sendSignal('1')">Solid Circle</button>
         <div id="status">Status: Disconnected</div>
+
+        <div class="slider-group">
+            <label>Horizontal Motor / Move (X): <span id="xVal">50</span></label>
+            <input type="range" id="sliderX" min="0" max="100" value="50" oninput="updateSliders()">
+        </div>
+        <div class="slider-group">
+            <label>Vertical Motor / Move (Y): <span id="yVal">50</span></label>
+            <input type="range" id="sliderY" min="0" max="100" value="50" oninput="updateSliders()">
+        </div>
+    </div>
+
+    <!-- 8x8 LED Matrix Designer -->
+    <div class="container">
+        <h3>LED Matrix Designer</h3>
+        
+        <div class="matrix-grid" id="matrixGrid"></div>
+
+        <div class="controls-row">
+            <select id="animMode">
+                <option value="static">Static Display</option>
+                <option value="blink">Blinking Display</option>
+            </select>
+            <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 15px;">Clear</button>
+        </div>
+
+        <label style="font-size: 12px; color: #b0bec5; display: block; margin-top: 10px;">Save to Preset Slot:</label>
+        <div class="presets-grid">
+            <button class="preset-btn" onclick="saveAndSendPreset(1)">Preset 1</button>
+            <button class="preset-btn" onclick="saveAndSendPreset(2)">Preset 2</button>
+            <button class="preset-btn" onclick="saveAndSendPreset(3)">Preset 3</button>
+            <button class="preset-btn" onclick="saveAndSendPreset(4)">Preset 4</button>
+            <button class="preset-btn" onclick="saveAndSendPreset(5)">Preset 5</button>
+            <button class="preset-btn" onclick="saveAndSendPreset(6)">Preset 6</button>
+        </div>
     </div>
 
     <script>
@@ -96,6 +192,36 @@
 
         const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
         const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a6";
+
+        // Initialize 8x8 Grid State (64 booleans)
+        let matrixData = Array(64).fill(false);
+
+        function buildGrid() {
+            const gridEl = document.getElementById('matrixGrid');
+            gridEl.innerHTML = '';
+            for (let i = 0; i < 64; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
+                cell.onclick = () => toggleCell(i);
+                gridEl.appendChild(cell);
+            }
+        }
+
+        function toggleCell(index) {
+            matrixData[index] = !matrixData[index];
+            buildGrid();
+        }
+
+        function clearMatrix() {
+            matrixData.fill(false);
+            buildGrid();
+        }
+
+        function updateSliders() {
+            document.getElementById('xVal').innerText = document.getElementById('sliderX').value;
+            document.getElementById('yVal').innerText = document.getElementById('sliderY').value;
+            // Future motor control telemetry can be triggered here
+        }
 
         async function connectBluetooth() {
             try {
@@ -113,33 +239,56 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bluetoothCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                // Update UI for successful connection
                 statusEl.innerText = "Status: Connected!";
                 statusEl.classList.add('connected');
                 connectBtnEl.innerText = "Connected";
-                connectBtnEl.style.backgroundColor = "#666"; // Gray out connect button
-                connectBtnEl.onclick = null; // Disable reconnect button
-
+                connectBtnEl.style.backgroundColor = "#555";
             } catch (error) {
                 console.error(error);
                 const statusEl = document.getElementById('status');
                 statusEl.innerText = "Status: Connection Failed";
-                statusEl.style.color = "#ef5350"; // Light red for error
+                statusEl.style.color = "#ef5350";
             }
         }
 
-        async function sendSignal(value) {
+        async function saveAndSendPreset(presetId) {
+            const mode = document.getElementById('animMode').value; // 'static' or 'blink'
+            
+            // Convert 64 booleans into 8 bytes (rows)
+            let rows = [];
+            for (let r = 0; r < 8; r++) {
+                let byteVal = 0;
+                for (let c = 0; c < 8; c++) {
+                    if (matrixData[r * 8 + c]) {
+                        byteVal |= (1 << (7 - c));
+                    }
+                }
+                rows.push(byteVal);
+            }
+
+            // Construct payload: PresetID (1 byte) + Mode (1 byte: 0=static, 1=blink) + 8 Row Bytes
+            // For simple text transport, format as comma-separated or custom protocol string
+            let modeFlag = (mode === 'blink') ? '1' : '0';
+            let payload = `P${presetId}:${modeFlag}:` + rows.join(',');
+
+            console.log("Sending Preset:", payload);
+
             if (!bluetoothCharacteristic) {
-                alert("Please connect to the ESP32 first!");
+                alert(`Preset ${presetId} saved locally! Connect to ESP32 to transmit.`);
                 return;
             }
+
             try {
                 const encoder = new TextEncoder();
-                await bluetoothCharacteristic.writeValue(encoder.encode(value));
+                await bluetoothCharacteristic.writeValue(encoder.encode(payload));
+                alert(`Preset ${presetId} sent to ESP32 successfully!`);
             } catch (error) {
-                console.error("Error sending data: ", error);
+                console.error("Error sending preset data: ", error);
             }
         }
+
+        // Initialize grid on load
+        buildGrid();
     </script>
 </body>
 </html>
