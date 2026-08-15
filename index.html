@@ -12,56 +12,51 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            padding: 10px;
+            padding: 15px;
             box-sizing: border-box;
             user-select: none;
             touch-action: none;
-            overflow: hidden;
         }
         .dashboard {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 20px;
             align-items: center;
             width: 100%;
-            max-width: 1200px;
-            height: 100%;
-            max-height: 860px;
-            justify-content: center;
+            max-width: 1100px;
         }
         .container {
             text-align: center;
             background-color: #1a1a1a;
-            padding: 12px 14px;
-            border-radius: 14px;
-            box-shadow: 0 4px 25px rgba(230, 74, 25, 0.25);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             width: 100%;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            gap: 6px;
+            gap: 12px;
         }
         .panel-title {
             color: #ff8a65;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
-            margin: 0 0 2px 0;
+            margin: 0 0 5px 0;
         }
         button {
             background-color: #e64a19;
             color: white;
             border: none;
-            padding: 8px 12px;
-            font-size: 13px;
+            padding: 10px 16px;
+            font-size: 14px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            margin: 2px 0;
+            margin: 4px 0;
             transition: all 0.2s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             touch-action: none;
@@ -76,8 +71,8 @@
             background-color: #ff9800;
         }
         #status {
-            margin-top: 2px;
-            font-size: 12px;
+            margin-top: 5px;
+            font-size: 13px;
             color: #b0bec5;
         }
         .connected {
@@ -85,7 +80,7 @@
             font-weight: bold;
         }
         .slider-section {
-            margin: 2px 0;
+            margin: 10px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -93,36 +88,36 @@
             width: 100%;
         }
         .slider-section label {
-            font-size: 13px;
+            font-size: 14px;
             color: #ff8a65;
-            margin-bottom: 2px;
+            margin-bottom: 6px;
             font-weight: bold;
         }
         .booster-label {
-            font-size: 10px;
+            font-size: 11px;
             color: #b0bec5;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             font-weight: bold;
             background: rgba(255, 138, 101, 0.1);
-            padding: 2px 8px;
+            padding: 3px 10px;
             border-radius: 4px;
             border: 1px solid rgba(255, 138, 101, 0.2);
         }
         .custom-slider-track {
             position: relative;
-            width: 50px;
-            height: 270px;
+            width: 60px;
+            height: 280px;
             background: #222;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
-            box-shadow: inset 0 3px 8px rgba(0,0,0,0.8);
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.8);
             touch-action: none;
         }
         .slider-center-marker {
             position: absolute;
             top: 50%;
-            left: 5px;
-            right: 5px;
+            left: 6px;
+            right: 6px;
             height: 2px;
             background: #444;
             transform: translateY(-50%);
@@ -140,11 +135,11 @@
         .slider-thumb {
             position: absolute;
             left: 50%;
-            width: 58px;
-            height: 32px;
+            width: 68px;
+            height: 36px;
             background: #ff5722;
             border: 2px solid #ff8a65;
-            border-radius: 16px;
+            border-radius: 18px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
             transform: translate(-50%, -50%);
             pointer-events: none;
@@ -158,53 +153,53 @@
             align-items: center;
         }
         .turn-group label {
-            font-size: 13px;
+            font-size: 14px;
             color: #ff8a65;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             font-weight: bold;
         }
         .turn-buttons {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-direction: row;
-            height: 160px;
-            margin-bottom: 6px;
+            height: 120px;
+            margin-bottom: 12px;
             width: 100%;
         }
         .turn-buttons button {
             margin: 0;
             background-color: #37474f;
-            font-size: 15px;
+            font-size: 16px;
             flex: 1;
             height: 100%;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
         }
         .turn-buttons button:hover {
             background-color: #455a64;
         }
         .key-hint {
-            font-size: 10px;
+            font-size: 11px;
             background: rgba(0,0,0,0.3);
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
             color: #b0bec5;
         }
         .quick-presets-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
             width: 100%;
         }
         .quick-btn {
             background-color: #2e7d32;
-            font-size: 13px;
-            padding: 8px 2px;
+            font-size: 14px;
+            padding: 10px 4px;
             margin: 0;
             border-radius: 8px;
             font-weight: bold;
@@ -212,20 +207,20 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 2px;
+            gap: 4px;
             width: 100%;
         }
         .presets-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
             width: 100%;
         }
         .preset-card {
             background-color: #222;
             border: 1px solid #444;
-            border-radius: 6px;
-            padding: 4px;
+            border-radius: 8px;
+            padding: 8px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -235,20 +230,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2px;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
         .preset-title {
-            font-size: 10px;
+            font-size: 11px;
             color: #ff8a65;
             font-weight: bold;
         }
         .preset-mode-tag {
-            font-size: 9px;
+            font-size: 10px;
             color: #b0bec5;
             background: #111;
-            padding: 1px 4px;
-            border-radius: 3px;
+            padding: 2px 5px;
+            border-radius: 4px;
         }
         /* LARGER PREVIEW MINI-GRIDS */
         .mini-grid {
@@ -256,9 +250,9 @@
             grid-template-columns: repeat(8, 1fr);
             gap: 1px;
             background: #000;
-            padding: 2px;
-            border-radius: 3px;
-            margin: 2px auto;
+            padding: 3px;
+            border-radius: 4px;
+            margin: 4px auto;
             width: 52px;
             height: 52px;
             cursor: pointer;
@@ -272,10 +266,10 @@
         }
         .btn-save {
             background-color: #c62828;
-            padding: 4px 2px;
-            font-size: 10px;
-            margin: 2px 0 0 0;
-            border-radius: 3px;
+            padding: 6px 4px;
+            font-size: 11px;
+            margin: 4px 0 0 0;
+            border-radius: 4px;
             width: 100%;
         }
         /* LARGER MAIN MATRIX DESIGNER */
@@ -284,8 +278,8 @@
             grid-template-columns: repeat(8, 1fr);
             gap: 2px;
             background: #111;
-            padding: 4px;
-            border-radius: 8px;
+            padding: 6px;
+            border-radius: 10px;
             margin: 0 auto;
             width: 190px;
             height: 190px;
@@ -303,7 +297,7 @@
         }
         .controls-row {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
             justify-content: space-between;
             width: 100%;
@@ -312,19 +306,19 @@
             background: #262626;
             color: white;
             border: 1px solid #444;
-            padding: 6px;
-            border-radius: 6px;
+            padding: 8px;
+            border-radius: 8px;
             width: 100%;
-            font-size: 12px;
+            font-size: 13px;
         }
         @media (min-width: 900px) {
             .dashboard {
                 flex-direction: row;
-                align-items: stretch;
+                align-items: flex-start;
+                justify-content: center;
             }
             .container {
                 flex: 1;
-                max-width: 390px;
             }
         }
     </style>
@@ -347,10 +341,10 @@
                     <option value="inside-out">Inside Out</option>
                     <option value="outside-in">Outside In</option>
                 </select>
-                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 6px 12px; margin:0;">Clear</button>
+                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 14px; margin:0;">Clear</button>
             </div>
 
-            <div style="font-size: 11px; color: #ff8a65; font-weight: bold; text-align: left; width: 100%; margin-top: 2px;">Save Presets:</div>
+            <div style="font-size: 12px; color: #ff8a65; font-weight: bold; text-align: left; width: 100%; margin-top: 4px;">Save Presets:</div>
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
@@ -364,7 +358,7 @@
                     <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
                 </div>
 
-                <label style="margin-top: 4px;">Quick Presets (1-6)</label>
+                <label style="margin-top: 8px;">Quick Presets (1-6)</label>
                 <div class="quick-presets-grid">
                     <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
                     <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="padding:1px 4px;">[2]</span></button>
