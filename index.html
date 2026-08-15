@@ -196,7 +196,7 @@
             background-color: #222;
             border: 1px solid #444;
             border-radius: 8px;
-            padding: 4px;
+            padding: 6px 4px;
             text-align: center;
         }
         .preset-title {
@@ -215,6 +215,7 @@
             margin: 0 auto 4px auto;
             width: 36px;
             height: 36px;
+            cursor: pointer;
         }
         .mini-cell {
             background-color: #1a1a1a;
@@ -223,24 +224,13 @@
         .mini-cell.active {
             background-color: #ff5722;
         }
-        .preset-actions {
-            display: flex;
-            gap: 3px;
-        }
-        .preset-actions button {
-            padding: 3px 2px;
+        .btn-save {
+            background-color: #c62828;
+            padding: 4px 2px;
             font-size: 9px;
             margin: 0;
             border-radius: 4px;
-        }
-        .btn-load {
-            background-color: #2e7d32;
-        }
-        .btn-load:hover {
-            background-color: #388e3c;
-        }
-        .btn-save {
-            background-color: #c62828;
+            width: 100%;
         }
         .btn-save:hover {
             background-color: #d32f2f;
@@ -329,7 +319,7 @@
             </div>
         </div>
 
-        <!-- 2. MIDDLE PANEL: 8x8 LED Matrix Designer & Presets/Preview -->
+        <!-- 2. MIDDLE PANEL: 8x8 LED Matrix Designer & Save Slots -->
         <div class="container">
             <h3 class="panel-title">LED Matrix Designer</h3>
             
@@ -345,11 +335,11 @@
                 <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 12px; margin:0;">Clear</button>
             </div>
 
-            <label style="font-size: 11px; color: #b0bec5; display: block; margin-top: 6px; font-weight: bold;">Preset Slots (Load / Save):</label>
+            <label style="font-size: 11px; color: #b0bec5; display: block; margin-top: 6px; font-weight: bold;">Save Presets (Click preview to edit):</label>
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
-        <!-- 3. RIGHT PANEL: Steering Control & 6 Clean Display Buttons -->
+        <!-- 3. RIGHT PANEL: Steering Control & Quick Display Buttons -->
         <div class="container">
             <h3 class="panel-title">Steering & Quick Display</h3>
             <div class="turn-group">
@@ -450,24 +440,21 @@
                     miniCell.className = 'mini-cell' + (presets[i].pattern[p] ? ' active' : '');
                     miniGrid.appendChild(miniCell);
                 }
+                
+                // Clicking mini-grid loads pattern back into the main editor
+                miniGrid.onclick = () => {
+                    matrixData = [...presets[i].pattern];
+                    document.getElementById('animMode').value = presets[i].mode;
+                    buildGrid();
+                    saveCurrentState();
+                };
                 card.appendChild(miniGrid);
-
-                const actions = document.createElement('div');
-                actions.className = 'preset-actions';
-
-                const loadBtn = document.createElement('button');
-                loadBtn.className = 'btn-load';
-                loadBtn.innerText = 'Load';
-                loadBtn.onclick = () => loadPreset(i + 1);
 
                 const saveBtn = document.createElement('button');
                 saveBtn.className = 'btn-save';
                 saveBtn.innerText = 'Save';
                 saveBtn.onclick = () => savePreset(i + 1);
-
-                actions.appendChild(loadBtn);
-                actions.appendChild(saveBtn);
-                card.appendChild(actions);
+                card.appendChild(saveBtn);
 
                 container.appendChild(card);
             }
