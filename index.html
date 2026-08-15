@@ -16,31 +16,32 @@
             min-height: 100vh;
             margin: 0;
             padding: 30px 20px;
-            user-select: none; /* Prevents text highlighting while dragging over cells */
+            user-select: none;
         }
         h2, h3 {
             color: #ff8a65;
             margin-top: 0;
         }
-        /* Maximized Desktop Dashboard Layout */
+        /* 3-Column Horizontal Dashboard Layout */
         .dashboard {
             display: flex;
             flex-direction: row;
-            gap: 30px;
+            gap: 25px;
             flex-wrap: wrap;
             justify-content: center;
-            max-width: 1100px;
+            max-width: 1200px;
             width: 100%;
+            align-items: flex-start;
         }
         .container {
             text-align: center;
             background-color: #1a1a1a;
-            padding: 30px;
+            padding: 25px;
             border-radius: 16px;
             box-shadow: 0 4px 25px rgba(230, 74, 25, 0.25);
             flex: 1;
-            min-width: 360px;
-            max-width: 500px;
+            min-width: 320px;
+            max-width: 380px;
             box-sizing: border-box;
         }
         button {
@@ -80,9 +81,9 @@
             color: #ffb74d !important;
             font-weight: bold;
         }
-        /* Thicker Vertical Spring-Return Slider */
+        /* Extra Thick Vertical Spring-Return Slider */
         .slider-section {
-            margin: 25px 0;
+            margin: 20px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -96,8 +97,8 @@
         input[type=range].vertical {
             writing-mode: vertical-lr;
             direction: rtl;
-            width: 70px; /* Made much thicker */
-            height: 280px;
+            width: 90px; /* Made very thick and easy to grab */
+            height: 260px;
             accent-color: #e64a19;
             background: #262626;
             border-radius: 8px;
@@ -121,6 +122,8 @@
         .turn-buttons button {
             margin: 0;
             background-color: #37474f;
+            padding: 20px 10px;
+            font-size: 16px;
         }
         .turn-buttons button:hover {
             background-color: #455a64;
@@ -134,7 +137,7 @@
             padding: 12px;
             border-radius: 10px;
             margin: 20px auto;
-            max-width: 320px;
+            max-width: 300px;
         }
         .matrix-cell {
             aspect-ratio: 1;
@@ -186,29 +189,20 @@
 <body>
 
     <div class="dashboard">
-        <!-- Connection & Movement Panel -->
+        <!-- 1. LEFT PANEL: Connection & Throttle Slider -->
         <div class="container">
             <h2>Nebula Control</h2>
             <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
             <div id="status">Status: Disconnected</div>
 
-            <!-- Vertical Spring-Return Slider -->
+            <!-- Thick Vertical Spring-Return Slider -->
             <div class="slider-section">
-                <label>Throttle / Vertical Move: <span id="yVal">50</span></label>
+                <label>Throttle (Y): <span id="yVal">50</span></label>
                 <input type="range" id="sliderY" class="vertical" min="0" max="100" value="50" oninput="updateSliders()">
-            </div>
-
-            <!-- Turn Buttons -->
-            <div class="turn-group">
-                <label>Steering / Turning</label>
-                <div class="turn-buttons">
-                    <button onmousedown="sendTurn('LEFT')" ontouchstart="sendTurn('LEFT')">&#9664; Left</button>
-                    <button onmousedown="sendTurn('RIGHT')" ontouchstart="sendTurn('RIGHT')">Right &#9654;</button>
-                </div>
             </div>
         </div>
 
-        <!-- 8x8 LED Matrix Designer Panel -->
+        <!-- 2. MIDDLE PANEL: 8x8 LED Matrix Designer -->
         <div class="container">
             <h3>LED Matrix Designer</h3>
             
@@ -232,6 +226,18 @@
                 <button class="preset-btn" onclick="saveAndSendPreset(6)">Preset 6</button>
             </div>
         </div>
+
+        <!-- 3. RIGHT PANEL: Steering / Turning Arrows -->
+        <div class="container">
+            <h3>Steering Control</h3>
+            <div class="turn-group" style="margin-top: 40px;">
+                <label>Turning Direction</label>
+                <div class="turn-buttons" style="flex-direction: column;">
+                    <button onmousedown="sendTurn('LEFT')" ontouchstart="sendTurn('LEFT')">&#9664; Turn Left</button>
+                    <button onmousedown="sendTurn('RIGHT')" ontouchstart="sendTurn('RIGHT')">Turn Right &#9654;</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -246,7 +252,6 @@
         let isMouseDown = false;
         let targetPaintState = true;
 
-        // Global mouseup listener to stop drag-painting
         document.addEventListener('mouseup', () => {
             isMouseDown = false;
         });
@@ -258,11 +263,10 @@
                 const cell = document.createElement('div');
                 cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
                 
-                // Click and drag-to-color painting logic
                 cell.onmousedown = (e) => {
                     e.preventDefault();
                     isMouseDown = true;
-                    targetPaintState = !matrixData[i]; // Invert clicked cell state
+                    targetPaintState = !matrixData[i];
                     matrixData[i] = targetPaintState;
                     cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
                 };
@@ -330,21 +334,20 @@
         }
 
         async function saveAndSendPreset(presetId) {
-            const mode = document.getElementById('animMode').value; // 'static' or 'blink'
+            const mode = document.getElementById('animMode').value;
             
-            // Rotate matrix 90 degrees clockwise: new_r = c, new_c = 7 - r
+            // Rotate matrix 90 degrees counter-clockwise: new_r = 7 - c, new_c = r
             let rotatedMatrix = Array(64).fill(false);
             for (let r = 0; r < 8; r++) {
                 for (let c = 0; c < 8; c++) {
                     if (matrixData[r * 8 + c]) {
-                        let new_r = c;
-                        let new_c = 7 - r;
+                        let new_r = 7 - c;
+                        let new_c = r;
                         rotatedMatrix[new_r * 8 + new_c] = true;
                     }
                 }
             }
 
-            // Convert rotated 64 booleans into 8 bytes (rows)
             let rows = [];
             for (let r = 0; r < 8; r++) {
                 let byteVal = 0;
