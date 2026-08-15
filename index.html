@@ -47,7 +47,7 @@
             color: #ff8a65;
             font-size: 16px;
             font-weight: bold;
-            margin: 0 0 8px 0;
+            margin: 0 0 6px 0;
         }
         button {
             background-color: #e64a19;
@@ -83,7 +83,7 @@
             font-weight: bold;
         }
         .slider-section {
-            margin: 5px 0;
+            margin: 2px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -93,13 +93,13 @@
         .slider-section label {
             font-size: 13px;
             color: #ff8a65;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
         }
         .custom-slider-track {
             position: relative;
             width: 55px;
-            height: 350px; /* Stretched vertically */
+            height: 350px;
             background: #222;
             border-radius: 28px;
             cursor: pointer;
@@ -140,7 +140,7 @@
             box-sizing: border-box;
         }
         .turn-group {
-            margin-top: 5px;
+            margin-top: 2px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -157,8 +157,8 @@
             display: flex;
             gap: 12px;
             flex-direction: row;
-            height: 170px; /* Stretched vertically much more */
-            margin-bottom: 8px;
+            height: 230px; /* Stretched vertically much more */
+            margin-bottom: 6px;
         }
         .turn-buttons button {
             margin: 0;
@@ -175,7 +175,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            margin-top: 4px;
+            margin-top: 2px;
         }
         .quick-btn {
             background-color: #2e7d32;
@@ -187,21 +187,21 @@
         .presets-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-top: 4px;
+            gap: 5px;
+            margin-top: 2px;
         }
         .preset-card {
             background-color: #222;
             border: 1px solid #444;
-            border-radius: 8px;
-            padding: 4px;
+            border-radius: 6px;
+            padding: 3px;
             text-align: center;
         }
         .preset-title {
             font-size: 10px;
             color: #ff8a65;
             font-weight: bold;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
         .mini-grid {
             display: grid;
@@ -210,9 +210,9 @@
             background: #000;
             padding: 2px;
             border-radius: 3px;
-            margin: 0 auto 3px auto;
-            width: 32px;
-            height: 32px;
+            margin: 0 auto 2px auto;
+            width: 30px;
+            height: 30px;
             cursor: pointer;
         }
         .mini-cell {
@@ -224,22 +224,22 @@
         }
         .btn-save {
             background-color: #c62828;
-            padding: 3px 2px;
+            padding: 2px 2px;
             font-size: 9px;
             margin: 0;
-            border-radius: 4px;
+            border-radius: 3px;
             width: 100%;
         }
         .matrix-grid {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
-            gap: 3px;
+            gap: 2px;
             background: #111;
-            padding: 6px;
+            padding: 4px;
             border-radius: 8px;
-            margin: 4px auto;
-            width: 200px;
-            height: 200px;
+            margin: 2px auto;
+            width: 180px;
+            height: 180px;
         }
         .matrix-cell {
             background-color: #262626;
@@ -249,13 +249,13 @@
         }
         .matrix-cell.active {
             background-color: #ff5722;
-            box-shadow: 0 0 5px #ff5722;
+            box-shadow: 0 0 4px #ff5722;
             border-color: #ff8a65;
         }
         .controls-row {
             display: flex;
             gap: 8px;
-            margin: 4px 0;
+            margin: 2px 0;
             align-items: center;
             justify-content: space-between;
         }
@@ -263,7 +263,7 @@
             background: #262626;
             color: white;
             border: 1px solid #444;
-            padding: 6px;
+            padding: 5px;
             border-radius: 6px;
             width: 100%;
             font-size: 12px;
@@ -314,10 +314,10 @@
                     <option value="refresh">Refresh (Sweep)</option>
                     <option value="pulse">Pulse Animation</option>
                 </select>
-                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 6px 10px; margin:0;">Clear</button>
+                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 5px 10px; margin:0;">Clear</button>
             </div>
 
-            <label style="font-size: 10px; color: #b0bec5; display: block; margin-top: 4px; font-weight: bold;">Save Presets:</label>
+            <label style="font-size: 10px; color: #b0bec5; display: block; margin: 2px 0; font-weight: bold;">Save Presets:</label>
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
@@ -325,13 +325,13 @@
         <div class="container">
             <h3 class="panel-title">Steering & Quick Display</h3>
             <div class="turn-group">
-                <label>Turning Direction (Multi-touch enabled)</label>
+                <label>Turning Direction</label>
                 <div class="turn-buttons">
                     <button id="leftBtn">&#9664; Left</button>
                     <button id="rightBtn">Right &#9654;</button>
                 </div>
 
-                <label style="margin-top: 10px;">Quick Presets (1-6)</label>
+                <label style="margin-top: 6px;">Quick Presets (1-6)</label>
                 <div class="quick-presets-grid">
                     <button class="quick-btn" onclick="playPreset(1)">P1</button>
                     <button class="quick-btn" onclick="playPreset(2)">P2</button>
@@ -445,7 +445,6 @@
             saveCurrentState();
         }
 
-        // Throttle Slider setup with Pointer Events (Multi-touch safe)
         const track = document.getElementById('sliderTrack');
         const fill = document.getElementById('sliderFill');
         const thumb = document.getElementById('sliderThumb');
@@ -498,7 +497,6 @@
 
         updateSliderVisuals(50);
 
-        // Multi-touch Steering Buttons
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
 
@@ -528,11 +526,10 @@
             const statusEl = document.getElementById('status');
             const connectBtnEl = document.getElementById('connectBtn');
 
-            // Check if Web Bluetooth is supported by the browser (Safari iOS missing support)
             if (!navigator.bluetooth) {
-                statusEl.innerText = "Status: Bluetooth unsupported on iOS Safari!";
+                statusEl.innerText = "Status: Bluetooth unsupported on iOS!";
                 statusEl.style.color = "#ef5350";
-                alert("Web Bluetooth is not natively supported in Safari on iPad/iOS. Please open this page using an iOS Web BLE browser app from the App Store (such as 'Bluefy' or 'BLE Link') to connect to your ESP32.");
+                alert("Web Bluetooth is not supported in standard iOS/iPadOS browsers (including Safari and Chrome). Please use a Web BLE browser app from the App Store (such as 'Bluefy' or 'BLE Link') to connect your ESP32.");
                 return;
             }
 
