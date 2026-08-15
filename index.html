@@ -86,7 +86,7 @@
             color: #ffb74d !important;
             font-weight: bold;
         }
-        /* Properly Widened & Long Vertical Spring-Return Slider */
+        /* Custom Center-Zero Vertical Throttle Slider */
         .slider-section {
             margin: 10px 0;
             display: flex;
@@ -101,54 +101,52 @@
             margin-bottom: 10px;
             font-weight: bold;
         }
-        .slider-wrapper {
+        .custom-slider-track {
             position: relative;
-            width: 65px;  /* Thickness */
-            height: 310px; /* Length */
-            background: #262626;
-            border-radius: 32.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 3px 8px rgba(0,0,0,0.7);
-        }
-        input[type=range].vertical {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            width: 310px; /* Matches wrapper height */
-            height: 65px; /* Matches wrapper width */
-            writing-mode: vertical-lr;
-            direction: rtl;
+            width: 55px;
+            height: 310px;
+            background: #222;
+            border-radius: 28px;
             cursor: pointer;
-            outline: none;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.8);
+            touch-action: none;
         }
-        input[type=range].vertical::-webkit-slider-runnable-track {
-            background: transparent;
-            width: 310px;
-            height: 65px;
+        .slider-center-marker {
+            position: absolute;
+            top: 50%;
+            left: 6px;
+            right: 6px;
+            height: 2px;
+            background: #444;
+            transform: translateY(-50%);
+            pointer-events: none;
+            z-index: 2;
         }
-        input[type=range].vertical::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 65px;   /* Full thickness of the track */
-            height: 42px;  /* Height of the thumb */
+        .slider-fill {
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            border-radius: 4px;
+            pointer-events: none;
+            transition: background-color 0.15s ease;
+            z-index: 1;
+        }
+        .slider-thumb {
+            position: absolute;
+            left: -4px;
+            width: 63px;
+            height: 36px;
             background: #ff5722;
-            border-radius: 21px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.5);
             border: 2px solid #ff8a65;
+            border-radius: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            cursor: grab;
+            transform: translateY(-50%);
+            pointer-events: none;
+            z-index: 3;
         }
-        input[type=range].vertical::-moz-range-track {
-            background: transparent;
-            width: 310px;
-            height: 65px;
-        }
-        input[type=range].vertical::-moz-range-thumb {
-            width: 65px;
-            height: 42px;
-            background: #ff5722;
-            border-radius: 21px;
-            border: 2px solid #ff8a65;
+        .custom-slider-track:active .slider-thumb {
+            cursor: grabbing;
         }
 
         /* Turn Buttons Layout (Side-by-Side & Vertically Stretched) */
@@ -299,11 +297,13 @@
                 <div id="status">Status: Disconnected</div>
             </div>
 
-            <!-- Thick, Long, Centered Vertical Spring-Return Slider (Defaults to 50) -->
+            <!-- Custom Center-Zero Vertical Slider (Defaults to 0, range -100 to 100) -->
             <div class="slider-section">
-                <label>Throttle (Y): <span id="yVal">50</span></label>
-                <div class="slider-wrapper">
-                    <input type="range" id="sliderY" class="vertical" min="0" max="100" value="50" oninput="updateSliders()">
+                <label>Throttle (Y): <span id="yVal">0</span></label>
+                <div class="custom-slider-track" id="sliderTrack">
+                    <div class="slider-center-marker"></div>
+                    <div class="slider-fill" id="sliderFill"></div>
+                    <div class="slider-thumb" id="sliderThumb"></div>
                 </div>
             </div>
         </div>
@@ -440,19 +440,82 @@
             buildGrid();
         }
 
-        function updateSliders() {
-            const val = document.getElementById('sliderY').value;
-            document.getElementById('yVal').innerText = val;
+        // Custom Slider Logic with Center-Zero (-100 to +100), Blue for Up, Red for Down & Spring Return to 0
+        let currentThrottle = 0;
+        const track = document.getElementById('sliderTrack');
+        const fill = document.getElementById('sliderFill');
+        const thumb = document.getElementById('sliderThumb');
+        const yValSpan = document.getElementById('yVal');
+
+        function updateSliderVisuals(percentVal) {
+            // percentVal is 0 to 100 internally (50 is center)
+            // Display value maps to -100 to +100
+            let displayVal = Math.round((percentVal - 50) * 2);
+            yValSpan.innerText = displayVal;
+            
+            // Thumb position (0 is bottom, 100 is top)
+            thumb.style.top = `${100 - percentVal}%`;
+
+            // Fill bar relative to center (50%)
+            if (percentVal > 50) {
+                // Growing upwards (Blue)
+                fill.style.top = `${100 - percentVal}%`;
+                fill.style.bottom = `50%`;
+                fill.style.backgroundColor = '#2196f3';
+            } else if (percentVal < 50) {
+                // Growing downwards (Red)
+                fill.style.top = `50%`;
+                fill.style.bottom = `${percentVal}%`;
+                fill.style.backgroundColor = '#f44336';
+            } else {
+                // Center point
+                fill.style.top = `50%`;
+                fill.style.bottom = `50%`;
+                fill.style.backgroundColor = 'transparent';
+            }
         }
 
-        // Spring-return logic: auto-center slider to 50 when released
-        const sliderY = document.getElementById('sliderY');
-        ['mouseup', 'touchend', 'touchcancel'].forEach(eventType => {
-            sliderY.addEventListener(eventType, () => {
-                sliderY.value = 50;
-                updateSliders();
-            });
+        function setThrottleFromEvent(e) {
+            const rect = track.getBoundingClientRect();
+            const clientY = e.clientY !== undefined ? e.clientY : (e.touches ? e.touches[0].clientY : rect.top);
+            
+            let offsetY = clientY - rect.top;
+            offsetY = Math.max(0, Math.min(rect.height, offsetY));
+
+            let percentVal = Math.round(100 - (offsetY / rect.height) * 100);
+            currentThrottle = percentVal;
+            updateSliderVisuals(percentVal);
+        }
+
+        let isDragging = false;
+
+        track.addEventListener('pointerdown', (e) => {
+            isDragging = true;
+            track.setPointerCapture(e.pointerId);
+            setThrottleFromEvent(e);
         });
+
+        track.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            setThrottleFromEvent(e);
+        });
+
+        function releaseSlider(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            if (e && e.pointerId) {
+                try { track.releasePointerCapture(e.pointerId); } catch(err) {}
+            }
+            // Spring return to center (50% internal -> 0 display)
+            currentThrottle = 50;
+            updateSliderVisuals(50);
+        }
+
+        track.addEventListener('pointerup', releaseSlider);
+        track.addEventListener('pointercancel', releaseSlider);
+
+        // Initialize slider at center (50% internal -> 0 display)
+        updateSliderVisuals(50);
 
         function sendTurn(direction) {
             console.log("Turn Command:", direction);
