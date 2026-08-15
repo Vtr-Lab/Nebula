@@ -28,7 +28,7 @@
             width: 100%;
             max-width: 1200px;
             height: 100%;
-            max-height: 820px;
+            max-height: 860px;
             justify-content: center;
         }
         .container {
@@ -43,20 +43,20 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .panel-title {
             color: #ff8a65;
             font-size: 16px;
             font-weight: bold;
-            margin: 0 0 4px 0;
+            margin: 0 0 2px 0;
         }
         button {
             background-color: #e64a19;
             color: white;
             border: none;
-            padding: 10px 14px;
-            font-size: 14px;
+            padding: 8px 12px;
+            font-size: 13px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
@@ -101,7 +101,7 @@
         .booster-label {
             font-size: 10px;
             color: #b0bec5;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             font-weight: bold;
             background: rgba(255, 138, 101, 0.1);
             padding: 2px 8px;
@@ -110,10 +110,10 @@
         }
         .custom-slider-track {
             position: relative;
-            width: 55px;
-            height: 290px;
+            width: 50px;
+            height: 270px;
             background: #222;
-            border-radius: 28px;
+            border-radius: 25px;
             cursor: pointer;
             box-shadow: inset 0 3px 8px rgba(0,0,0,0.8);
             touch-action: none;
@@ -121,8 +121,8 @@
         .slider-center-marker {
             position: absolute;
             top: 50%;
-            left: 6px;
-            right: 6px;
+            left: 5px;
+            right: 5px;
             height: 2px;
             background: #444;
             transform: translateY(-50%);
@@ -131,8 +131,8 @@
         }
         .slider-fill {
             position: absolute;
-            left: 5px;
-            right: 5px;
+            left: 4px;
+            right: 4px;
             border-radius: 4px;
             pointer-events: none;
             z-index: 1;
@@ -140,11 +140,11 @@
         .slider-thumb {
             position: absolute;
             left: 50%;
-            width: 63px;
-            height: 36px;
+            width: 58px;
+            height: 32px;
             background: #ff5722;
             border: 2px solid #ff8a65;
-            border-radius: 18px;
+            border-radius: 16px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.6);
             transform: translate(-50%, -50%);
             pointer-events: none;
@@ -166,10 +166,10 @@
         }
         .turn-buttons {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-direction: row;
-            height: 180px;
-            margin-bottom: 8px;
+            height: 160px;
+            margin-bottom: 6px;
             width: 100%;
         }
         .turn-buttons button {
@@ -204,7 +204,7 @@
         .quick-btn {
             background-color: #2e7d32;
             font-size: 13px;
-            padding: 10px 2px;
+            padding: 8px 2px;
             margin: 0;
             border-radius: 8px;
             font-weight: bold;
@@ -250,6 +250,7 @@
             padding: 1px 4px;
             border-radius: 3px;
         }
+        /* LARGER PREVIEW MINI-GRIDS */
         .mini-grid {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
@@ -258,8 +259,8 @@
             padding: 2px;
             border-radius: 3px;
             margin: 2px auto;
-            width: 32px;
-            height: 32px;
+            width: 52px;
+            height: 52px;
             cursor: pointer;
         }
         .mini-cell {
@@ -271,12 +272,13 @@
         }
         .btn-save {
             background-color: #c62828;
-            padding: 3px 2px;
-            font-size: 9px;
+            padding: 4px 2px;
+            font-size: 10px;
             margin: 2px 0 0 0;
             border-radius: 3px;
             width: 100%;
         }
+        /* LARGER MAIN MATRIX DESIGNER */
         .matrix-grid {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
@@ -285,8 +287,8 @@
             padding: 4px;
             border-radius: 8px;
             margin: 0 auto;
-            width: 140px;
-            height: 140px;
+            width: 190px;
+            height: 190px;
         }
         .matrix-cell {
             background-color: #262626;
@@ -310,7 +312,7 @@
             background: #262626;
             color: white;
             border: 1px solid #444;
-            padding: 5px;
+            padding: 6px;
             border-radius: 6px;
             width: 100%;
             font-size: 12px;
@@ -322,7 +324,7 @@
             }
             .container {
                 flex: 1;
-                max-width: 380px;
+                max-width: 390px;
             }
         }
     </style>
@@ -362,7 +364,7 @@
                     <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
                 </div>
 
-                <label style="margin-top: 6px;">Quick Presets (1-6)</label>
+                <label style="margin-top: 4px;">Quick Presets (1-6)</label>
                 <div class="quick-presets-grid">
                     <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
                     <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="padding:1px 4px;">[2]</span></button>
