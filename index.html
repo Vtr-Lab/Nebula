@@ -177,9 +177,9 @@
             background-color: #455a64;
         }
         .key-hint {
-            font-size: 11px;
+            font-size: 10px;
             background: rgba(0,0,0,0.3);
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
             color: #b0bec5;
         }
@@ -345,18 +345,18 @@
             <div class="turn-group">
                 <label>Turning Direction</label>
                 <div class="turn-buttons">
-                    <button id="leftBtn">&#9664; Left <span class="key-hint">[A]</span></button>
-                    <button id="rightBtn">Right &#9654; <span class="key-hint">[D]</span></button>
+                    <button id="leftBtn">&#9664; Left <span class="key-hint">[A] [&larr;]</span></button>
+                    <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
                 </div>
 
                 <label style="margin-top: 8px;">Quick Presets (1-6)</label>
                 <div class="quick-presets-grid">
-                    <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="font-size:10px; padding:1px 4px;">[1]</span></button>
-                    <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="font-size:10px; padding:1px 4px;">[2]</span></button>
-                    <button class="quick-btn" onclick="playPreset(3)">P3 <span class="key-hint" style="font-size:10px; padding:1px 4px;">[3]</span></button>
-                    <button class="quick-btn" onclick="playPreset(4)">P4 <span class="key-hint" style="font-size:10px; padding:1px 4px;">[4]</span></button>
-                    <button class="quick-btn" onclick="playPreset(5)">P5 <span class="key-hint" style="font-size:10px; padding:1px 4px;">[5]</span></button>
-                    <button class="quick-btn" onclick="playPreset(6)">P6 <span class="key-hint" style="font-size:10px; padding:1px 4px;">[6]</span></button>
+                    <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
+                    <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="padding:1px 4px;">[2]</span></button>
+                    <button class="quick-btn" onclick="playPreset(3)">P3 <span class="key-hint" style="padding:1px 4px;">[3]</span></button>
+                    <button class="quick-btn" onclick="playPreset(4)">P4 <span class="key-hint" style="padding:1px 4px;">[4]</span></button>
+                    <button class="quick-btn" onclick="playPreset(5)">P5 <span class="key-hint" style="padding:1px 4px;">[5]</span></button>
+                    <button class="quick-btn" onclick="playPreset(6)">P6 <span class="key-hint" style="padding:1px 4px;">[6]</span></button>
                 </div>
             </div>
         </div>
@@ -515,7 +515,6 @@
 
         updateSliderVisuals(50);
 
-        // Pointer-based mouse/touch buttons
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
 
@@ -540,16 +539,20 @@
         });
 
         // -------------------------------------------------------------
-        // LAPTOP KEYBOARD CONTROL HANDLER (W, A, S, D, Space, Presets 1-6)
+        // KEYBOARD CONTROL HANDLER (WASD, Arrow Keys, Space, Presets 1-6)
         // -------------------------------------------------------------
         const pressedKeys = new Set();
+        const validKeys = [
+            'Space', 'KeyW', 'KeyS', 'KeyA', 'KeyD', 
+            'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 
+            'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6'
+        ];
 
         window.addEventListener('keydown', (e) => {
-            if (['Space', 'KeyW', 'KeyS', 'KeyA', 'KeyD', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6'].includes(e.code)) {
+            if (validKeys.includes(e.code)) {
                 e.preventDefault();
             }
 
-            // Trigger presets 1-6 directly on key press
             if (e.code === 'Digit1') playPreset(1);
             if (e.code === 'Digit2') playPreset(2);
             if (e.code === 'Digit3') playPreset(3);
@@ -568,26 +571,26 @@
 
         function evaluateKeyboardControls() {
             let isBoosting = pressedKeys.has('Space');
+            let forwardPressed = pressedKeys.has('KeyW') || pressedKeys.has('ArrowUp');
+            let backwardPressed = pressedKeys.has('KeyS') || pressedKeys.has('ArrowDown');
+            let leftPressed = pressedKeys.has('KeyA') || pressedKeys.has('ArrowLeft');
+            let rightPressed = pressedKeys.has('KeyD') || pressedKeys.has('ArrowRight');
             
-            // Throttle evaluation (W / S)
-            let throttlePercent = 50; // Neutral
-            if (pressedKeys.has('KeyW') && !pressedKeys.has('KeyS')) {
-                // Speed 2 (Boost) = 100%, Speed 1 = 75%
+            let throttlePercent = 50; 
+            if (forwardPressed && !backwardPressed) {
                 throttlePercent = isBoosting ? 100 : 75;
-            } else if (pressedKeys.has('KeyS') && !pressedKeys.has('KeyW')) {
-                // Speed 2 (Boost) = 0%, Speed 1 = 25%
+            } else if (backwardPressed && !forwardPressed) {
                 throttlePercent = isBoosting ? 0 : 25;
             }
             updateSliderVisuals(throttlePercent);
 
-            // Steering evaluation (A / D)
-            if (pressedKeys.has('KeyA')) {
+            if (leftPressed) {
                 leftBtn.style.backgroundColor = '#1e88e5';
             } else {
                 leftBtn.style.backgroundColor = '#37474f';
             }
 
-            if (pressedKeys.has('KeyD')) {
+            if (rightPressed) {
                 rightBtn.style.backgroundColor = '#1e88e5';
             } else {
                 rightBtn.style.backgroundColor = '#37474f';
@@ -668,7 +671,10 @@
                 for (let r = 0; r < 8; r++) {
                     for (let c = 0; c < 8; c++) {
                         if (customPattern[r * 8 + c]) {
-                            rotated[(7 - c) * 8 + r] = true;
+                            // 90 degrees counter-clockwise rotation for updated physical placement
+                            let new_r = c;
+                            let new_c = 7 - r;
+                            rotated[new_r * 8 + new_c] = true;
                         }
                     }
                 }
