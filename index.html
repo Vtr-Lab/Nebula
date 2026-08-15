@@ -157,7 +157,7 @@
             gap: 12px;
             flex-direction: row;
             height: 70px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .turn-buttons button {
             margin: 0;
@@ -170,11 +170,27 @@
         .turn-buttons button:hover {
             background-color: #455a64;
         }
+        .quick-presets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 5px;
+        }
+        .quick-btn {
+            background-color: #2e7d32;
+            font-size: 14px;
+            padding: 10px 4px;
+            margin: 0;
+            border-radius: 8px;
+        }
+        .quick-btn:hover {
+            background-color: #388e3c;
+        }
         .presets-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            margin-top: 5px;
+            margin-top: 6px;
         }
         .preset-card {
             background-color: #222;
@@ -287,7 +303,7 @@
                 max-width: 390px;
             }
             .turn-buttons {
-                height: 100px;
+                height: 80px;
             }
         }
     </style>
@@ -313,7 +329,7 @@
             </div>
         </div>
 
-        <!-- 2. MIDDLE PANEL: 8x8 LED Matrix Designer -->
+        <!-- 2. MIDDLE PANEL: 8x8 LED Matrix Designer & Presets/Preview -->
         <div class="container">
             <h3 class="panel-title">LED Matrix Designer</h3>
             
@@ -328,11 +344,14 @@
                 </select>
                 <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 12px; margin:0;">Clear</button>
             </div>
+
+            <label style="font-size: 11px; color: #b0bec5; display: block; margin-top: 6px; font-weight: bold;">Preset Slots (Load / Save):</label>
+            <div class="presets-container" id="presetsContainer"></div>
         </div>
 
-        <!-- 3. RIGHT PANEL: Steering Control & 6 Preset Slots -->
+        <!-- 3. RIGHT PANEL: Steering Control & 6 Clean Display Buttons -->
         <div class="container">
-            <h3 class="panel-title">Steering & Presets</h3>
+            <h3 class="panel-title">Steering & Quick Display</h3>
             <div class="turn-group">
                 <label>Turning Direction</label>
                 <div class="turn-buttons">
@@ -340,8 +359,15 @@
                     <button onmousedown="sendTurn('RIGHT')" ontouchstart="sendTurn('RIGHT')">Right &#9654;</button>
                 </div>
 
-                <label style="margin-top: 10px;">Preset Slots (Load / Save)</label>
-                <div class="presets-container" id="presetsContainer"></div>
+                <label style="margin-top: 15px;">Quick Display Presets (1-6)</label>
+                <div class="quick-presets-grid">
+                    <button class="quick-btn" onclick="loadPreset(1)">P1</button>
+                    <button class="quick-btn" onclick="loadPreset(2)">P2</button>
+                    <button class="quick-btn" onclick="loadPreset(3)">P3</button>
+                    <button class="quick-btn" onclick="loadPreset(4)">P4</button>
+                    <button class="quick-btn" onclick="loadPreset(5)">P5</button>
+                    <button class="quick-btn" onclick="loadPreset(6)">P6</button>
+                </div>
             </div>
         </div>
     </div>
@@ -353,7 +379,6 @@
         const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
         const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a6";
 
-        // Load saved grid, mode, and presets from localStorage if available
         let matrixData = JSON.parse(localStorage.getItem('nebula_matrix')) || Array(64).fill(false);
         
         let savedMode = localStorage.getItem('nebula_mode') || 'static';
@@ -594,7 +619,6 @@
                 rows.push(byteVal);
             }
 
-            // Send mode flag identifiers to ESP32: static='0', blink='1', refresh='2', pulse='3'
             let modeFlag = '0';
             if (mode === 'blink') modeFlag = '1';
             else if (mode === 'refresh') modeFlag = '2';
