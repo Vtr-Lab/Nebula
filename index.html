@@ -156,7 +156,7 @@
             display: flex;
             gap: 12px;
             flex-direction: row;
-            height: 70px;
+            height: 120px; /* Increased vertical height */
             margin-bottom: 10px;
         }
         .turn-buttons button {
@@ -293,7 +293,7 @@
                 max-width: 390px;
             }
             .turn-buttons {
-                height: 80px;
+                height: 140px; /* Increased vertical height for desktop */
             }
         }
     </style>
@@ -442,7 +442,6 @@
                     miniGrid.appendChild(miniCell);
                 }
                 
-                // Clicking mini-grid loads pattern back into the main editor
                 miniGrid.onclick = () => {
                     matrixData = [...presets[i].pattern];
                     document.getElementById('animMode').value = presets[i].mode;
@@ -568,7 +567,7 @@
             presets[index].mode = document.getElementById('animMode').value;
             buildPresetUI();
             saveCurrentState();
-            playPreset(presetId); // Play automatically upon saving
+            playPreset(presetId);
         }
 
         async function playPreset(presetId) {
