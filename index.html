@@ -93,13 +93,23 @@
         .slider-section label {
             font-size: 13px;
             color: #ff8a65;
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        .booster-label {
+            font-size: 10px;
+            color: #b0bec5;
             margin-bottom: 6px;
             font-weight: bold;
+            background: rgba(255, 138, 101, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 138, 101, 0.2);
         }
         .custom-slider-track {
             position: relative;
             width: 55px;
-            height: 350px;
+            height: 310px;
             background: #222;
             border-radius: 28px;
             cursor: pointer;
@@ -301,25 +311,7 @@
 <body>
 
     <div class="dashboard">
-        <!-- 1. LEFT PANEL: Connection & Throttle Slider -->
-        <div class="container">
-            <div>
-                <h2 class="panel-title">Nebula Control</h2>
-                <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
-                <div id="status">Status: Disconnected</div>
-            </div>
-
-            <div class="slider-section">
-                <label>Throttle (Y): <span id="yVal">0</span></label>
-                <div class="custom-slider-track" id="sliderTrack">
-                    <div class="slider-center-marker"></div>
-                    <div class="slider-fill" id="sliderFill"></div>
-                    <div class="slider-thumb" id="sliderThumb"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. MIDDLE PANEL: 8x8 LED Matrix Designer & Save Slots -->
+        <!-- 1. LEFT PANEL: LED Matrix Designer & Save Slots -->
         <div class="container">
             <h3 class="panel-title">LED Matrix Designer</h3>
             
@@ -339,7 +331,7 @@
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
-        <!-- 3. RIGHT PANEL: Steering Control & Quick Display Buttons -->
+        <!-- 2. MIDDLE PANEL: Steering Control & Quick Display Buttons -->
         <div class="container">
             <h3 class="panel-title">Steering & Quick Display</h3>
             <div class="turn-group">
@@ -357,6 +349,25 @@
                     <button class="quick-btn" onclick="playPreset(4)">P4 <span class="key-hint" style="padding:1px 4px;">[4]</span></button>
                     <button class="quick-btn" onclick="playPreset(5)">P5 <span class="key-hint" style="padding:1px 4px;">[5]</span></button>
                     <button class="quick-btn" onclick="playPreset(6)">P6 <span class="key-hint" style="padding:1px 4px;">[6]</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. RIGHT PANEL: Nebula Control & Throttle Slider -->
+        <div class="container">
+            <div>
+                <h2 class="panel-title">Nebula Control</h2>
+                <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
+                <div id="status">Status: Disconnected</div>
+            </div>
+
+            <div class="slider-section">
+                <label>Throttle (Y): <span id="yVal">0</span></label>
+                <div class="booster-label">Booster: [Spacebar]</div>
+                <div class="custom-slider-track" id="sliderTrack">
+                    <div class="slider-center-marker"></div>
+                    <div class="slider-fill" id="sliderFill"></div>
+                    <div class="slider-thumb" id="sliderThumb"></div>
                 </div>
             </div>
         </div>
@@ -671,7 +682,7 @@
                 for (let r = 0; r < 8; r++) {
                     for (let c = 0; c < 8; c++) {
                         if (customPattern[r * 8 + c]) {
-                            // 90 degrees counter-clockwise rotation for updated physical placement
+                            // 90 degrees clockwise rotation
                             let new_r = c;
                             let new_c = 7 - r;
                             rotated[new_r * 8 + new_c] = true;
