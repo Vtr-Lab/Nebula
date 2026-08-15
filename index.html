@@ -81,7 +81,7 @@
             color: #ffb74d !important;
             font-weight: bold;
         }
-        /* Extra Thick Vertical Spring-Return Slider */
+        /* Horizontally Thick Vertical Spring-Return Slider */
         .slider-section {
             margin: 20px 0;
             display: flex;
@@ -97,14 +97,14 @@
         input[type=range].vertical {
             writing-mode: vertical-lr;
             direction: rtl;
-            width: 120px; /* Extra thick width */
-            height: 260px;
+            width: 260px; /* Vertical height/length of the slider */
+            height: 45px; /* Horizontal thickness of the slider track */
             accent-color: #e64a19;
             background: #262626;
             border-radius: 8px;
             cursor: pointer;
         }
-        /* Turn Buttons Layout */
+        /* Turn Buttons Layout (Side-by-Side) */
         .turn-group {
             margin-top: 20px;
         }
@@ -112,19 +112,20 @@
             font-size: 14px;
             color: #ff8a65;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-weight: bold;
         }
         .turn-buttons {
             display: flex;
             gap: 15px;
-            flex-direction: column;
+            flex-direction: row;
         }
         .turn-buttons button {
             margin: 0;
             background-color: #37474f;
             padding: 20px 10px;
             font-size: 16px;
+            flex: 1;
         }
         .turn-buttons button:hover {
             background-color: #455a64;
@@ -275,8 +276,8 @@
             <div class="turn-group" style="margin-top: 40px;">
                 <label>Turning Direction</label>
                 <div class="turn-buttons">
-                    <button onmousedown="sendTurn('LEFT')" ontouchstart="sendTurn('LEFT')">&#9664; Turn Left</button>
-                    <button onmousedown="sendTurn('RIGHT')" ontouchstart="sendTurn('RIGHT')">Turn Right &#9654;</button>
+                    <button onmousedown="sendTurn('LEFT')" ontouchstart="sendTurn('LEFT')">&#9664; Left</button>
+                    <button onmousedown="sendTurn('RIGHT')" ontouchstart="sendTurn('RIGHT')">Right &#9654;</button>
                 </div>
             </div>
         </div>
