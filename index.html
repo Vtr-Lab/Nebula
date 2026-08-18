@@ -2,248 +2,904 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Nebula Robot Controller & Telemetry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Controller</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            text-align: center;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #000000;
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
+            padding: 15px;
+            box-sizing: border-box;
+            user-select: none;
+            touch-action: none;
         }
-        button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #00adb5;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        button:hover {
-            background-color: #007e85;
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            width: 100%;
+            max-width: 1100px;
         }
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding-bottom: 40px;
+            text-align: center;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
-        .section-title {
-            margin-top: 30px;
-            color: #00adb5;
+        .panel-title {
+            color: #ff8a65;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
         }
-        
-        /* Horizontal Layout for IMU Axes */
-        .horizontal-axis-row {
+        button {
+            background-color: #e64a19;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin: 4px 0;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            touch-action: none;
+        }
+        button:hover {
+            background-color: #ff5722;
+        }
+        button:active {
+            background-color: #bf360c;
+        }
+        #connectBtn {
+            background-color: #ff9800;
+        }
+        #estopBtn {
+            background-color: #d32f2f;
+        }
+        #estopBtn:hover {
+            background-color: #f44336;
+        }
+        #status {
+            margin-top: 5px;
+            font-size: 13px;
+            color: #b0bec5;
+        }
+        .connected {
+            color: #ffb74d !important;
+            font-weight: bold;
+        }
+        .telemetry-box {
+            margin-top: 6px;
+            width: 100%;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 8px 10px;
+            box-sizing: border-box;
+        }
+        .slider-section {
+            margin: 5px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .slider-section label {
+            font-size: 14px;
+            color: #ff8a65;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        .booster-label {
+            font-size: 11px;
+            color: #b0bec5;
+            margin-bottom: 8px;
+            font-weight: bold;
+            background: rgba(255, 138, 101, 0.1);
+            padding: 3px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 138, 101, 0.2);
+        }
+        .custom-slider-track {
+            position: relative;
+            width: 60px;
+            height: 250px;
+            background: #222;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.8);
+            touch-action: none;
+        }
+        .slider-center-marker {
+            position: absolute;
+            top: 50%;
+            left: 6px;
+            right: 6px;
+            height: 2px;
+            background: #444;
+            transform: translateY(-50%);
+            pointer-events: none;
+            z-index: 2;
+        }
+        .slider-fill {
+            position: absolute;
+            left: 4px;
+            right: 4px;
+            border-radius: 4px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .slider-thumb {
+            position: absolute;
+            left: 50%;
+            width: 68px;
+            height: 36px;
+            background: #ff5722;
+            border: 2px solid #ff8a65;
+            border-radius: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 3;
+            box-sizing: border-box;
+        }
+        .turn-group {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+        .turn-group label {
+            font-size: 14px;
+            color: #ff8a65;
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        .turn-buttons {
+            display: flex;
+            gap: 12px;
+            flex-direction: row;
+            height: 120px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+        .turn-buttons button {
+            margin: 0;
+            background-color: #37474f;
+            font-size: 16px;
+            flex: 1;
+            height: 100%;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .turn-buttons button:hover {
+            background-color: #455a64;
+        }
+        .key-hint {
+            font-size: 11px;
+            background: rgba(0,0,0,0.3);
+            padding: 3px 8px;
+            border-radius: 4px;
+            color: #b0bec5;
+        }
+        .quick-presets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+        .quick-btn {
+            background-color: #2e7d32;
+            font-size: 14px;
+            padding: 10px 4px;
+            margin: 0;
+            border-radius: 8px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+        }
+        .presets-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+        }
+        .preset-card {
+            background-color: #222;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .preset-header {
             display: flex;
             justify-content: space-between;
-            gap: 15px;
-            margin-top: 15px;
+            align-items: center;
+            margin-bottom: 4px;
         }
-        .axis-card {
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            flex: 1;
-            text-align: center;
-        }
-        .axis-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 14px;
-            color: #aaaaaa;
-        }
-        .axis-value {
-            font-size: 20px;
+        .preset-title {
+            font-size: 11px;
+            color: #ff8a65;
             font-weight: bold;
-            color: #00adb5;
         }
-
-        /* LED Matrix Grid Designer Styles */
-        .matrix-container {
-            display: inline-grid;
-            grid-template-columns: repeat(8, 45px);
-            grid-template-rows: repeat(8, 45px);
-            gap: 5px;
-            background-color: #1e1e1e;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            margin-top: 15px;
+        .preset-mode-tag {
+            font-size: 10px;
+            color: #b0bec5;
+            background: #111;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 1px;
+            background: #000;
+            padding: 3px;
+            border-radius: 4px;
+            margin: 4px auto;
+            width: 52px;
+            height: 52px;
+            cursor: pointer;
+        }
+        .mini-cell {
+            background-color: #1a1a1a;
+            border-radius: 1px;
+        }
+        .mini-cell.active {
+            background-color: #ff5722;
+        }
+        .btn-save {
+            background-color: #c62828;
+            padding: 6px 4px;
+            font-size: 11px;
+            margin: 4px 0 0 0;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 2px;
+            background: #111;
+            padding: 6px;
+            border-radius: 10px;
+            margin: 0 auto;
+            width: 190px;
+            height: 190px;
         }
         .matrix-cell {
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            border-radius: 4px;
+            background-color: #262626;
+            border: 1px solid #333;
+            border-radius: 2px;
             cursor: pointer;
-            transition: background-color 0.1s;
         }
         .matrix-cell.active {
-            background-color: #ff2e63;
-            box-shadow: 0 0 8px #ff2e63;
+            background-color: #ff5722;
+            box-shadow: 0 0 4px #ff5722;
+            border-color: #ff8a65;
+        }
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        select {
+            background: #262626;
+            color: white;
+            border: 1px solid #444;
+            padding: 8px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 13px;
+        }
+        @media (min-width: 900px) {
+            .dashboard {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: center;
+            }
+            .container {
+                flex: 1;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Nebula Robot Dashboard</h1>
-        <button id="connectBtn">Connect to Nebula BLE</button>
-        <p id="status">Status: Disconnected</p>
+    <div class="dashboard">
+        <!-- 1. LEFT PANEL: LED Matrix Designer & Save Slots -->
+        <div class="container">
+            <h3 class="panel-title">LED Matrix Designer</h3>
+            
+            <div class="matrix-grid" id="matrixGrid"></div>
 
-        <!-- IMU TELEMETRY SECTION -->
-        <h2 class="section-title">IMU Sensor Telemetry</h2>
-        
-        <div class="horizontal-axis-row">
-            <div class="axis-card">
-                <h3>Accel X</h3>
-                <div id="accelX" class="axis-value">0.000</div>
+            <div class="controls-row">
+                <select id="animMode" onchange="saveCurrentState()">
+                    <option value="static">Static</option>
+                    <option value="blink">Flash (Blink)</option>
+                    <option value="refresh">Sweep (Refresh)</option>
+                    <option value="pulse">Pulse</option>
+                    <option value="inside-out">Inside Out</option>
+                    <option value="outside-in">Outside In</option>
+                </select>
+                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 14px; margin:0;">Clear</button>
             </div>
-            <div class="axis-card">
-                <h3>Accel Y</h3>
-                <div id="accelY" class="axis-value">0.000</div>
-            </div>
-            <div class="axis-card">
-                <h3>Accel Z</h3>
-                <div id="accelZ" class="axis-value">1.000</div>
+
+            <div style="font-size: 12px; color: #ff8a65; font-weight: bold; text-align: left; width: 100%; margin-top: 4px;">Save Presets:</div>
+            <div class="presets-container" id="presetsContainer"></div>
+        </div>
+
+        <!-- 2. MIDDLE PANEL: Steering Control & Quick Display -->
+        <div class="container">
+            <h3 class="panel-title">Steering & Quick Display</h3>
+            <div class="turn-group">
+                <label>Turning Direction</label>
+                <div class="turn-buttons">
+                    <button id="leftBtn">&#9664; Left <span class="key-hint">[A] [&larr;]</span></button>
+                    <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
+                </div>
+
+                <label style="margin-top: 8px;">Quick Presets (1-6)</label>
+                <div class="quick-presets-grid">
+                    <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
+                    <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="padding:1px 4px;">[2]</span></button>
+                    <button class="quick-btn" onclick="playPreset(3)">P3 <span class="key-hint" style="padding:1px 4px;">[3]</span></button>
+                    <button class="quick-btn" onclick="playPreset(4)">P4 <span class="key-hint" style="padding:1px 4px;">[4]</span></button>
+                    <button class="quick-btn" onclick="playPreset(5)">P5 <span class="key-hint" style="padding:1px 4px;">[5]</span></button>
+                    <button class="quick-btn" onclick="playPreset(6)">P6 <span class="key-hint" style="padding:1px 4px;">[6]</span></button>
+                </div>
             </div>
         </div>
 
-        <div class="horizontal-axis-row">
-            <div class="axis-card">
-                <h3>Gyro X</h3>
-                <div id="gyroX" class="axis-value">0.00</div>
+        <!-- 3. RIGHT PANEL: Nebula Control & Throttle Slider -->
+        <div class="container">
+            <div style="width: 100%;">
+                <h2 class="panel-title">Nebula Control</h2>
+                <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
+                <button id="estopBtn" onclick="emergencyStop()">EMERGENCY STOP <span class="key-hint" style="background:rgba(0,0,0,0.2); color:#fff;">[Esc]</span></button>
+                <div id="status">Status: Disconnected</div>
+                
+                <!-- Telemetry Readout Panel -->
+                <div class="telemetry-box">
+                    <div style="font-size: 11px; color: #ff8a65; font-weight: bold; margin-bottom: 4px;">IMU & Battery Telemetry</div>
+                    <div style="display: flex; justify-content: space-around; font-size: 12px; color: #b0bec5;">
+                        <span>Pitch: <strong id="telemetryPitch" style="color: #fff;">0.0°</strong></span>
+                        <span>Batt: <strong id="telemetryBattery" style="color: #fff;">--V</strong></span>
+                    </div>
+                </div>
             </div>
-            <div class="axis-card">
-                <h3>Gyro Y</h3>
-                <div id="gyroY" class="axis-value">0.00</div>
-            </div>
-            <div class="axis-card">
-                <h3>Gyro Z</h3>
-                <div id="gyroZ" class="axis-value">0.00</div>
-            </div>
-        </div>
 
-        <!-- LED MATRIX DESIGNER SECTION -->
-        <h2 class="section-title">LED Matrix Designer</h2>
-        <div class="matrix-container" id="matrixGrid"></div>
-        <div>
-            <button id="clearMatrixBtn" style="background-color: #d9534f; margin-top: 15px;">Clear Matrix</button>
+            <div class="slider-section">
+                <label>Throttle (Y): <span id="yVal">0</span></label>
+                <div class="booster-label">Booster: [Spacebar]</div>
+                <div class="custom-slider-track" id="sliderTrack">
+                    <div class="slider-center-marker"></div>
+                    <div class="slider-fill" id="sliderFill"></div>
+                    <div class="slider-thumb" id="sliderThumb"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         let bluetoothDevice;
-        let bleCharacteristic;
+        let bluetoothCharacteristic;
+        let activeAnimationInterval = null;
+        let previewInterval = null;
+        let animTick = 0;
 
         const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
         const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a6";
 
-        // Matrix state grid (8 rows x 8 cols)
-        const matrixData = Array(8).fill(0).map(() => Array(8).fill(0));
+        let matrixData = JSON.parse(localStorage.getItem('nebula_matrix')) || Array(64).fill(false);
+        let savedMode = localStorage.getItem('nebula_mode') || 'static';
+        document.getElementById('animMode').value = savedMode;
 
-        // Build 8x8 Grid UI
-        const gridElement = document.getElementById('matrixGrid');
-        for (let r = 0; r < 8; r++) {
-            for (let c = 0; c < 8; c++) {
+        let presets = JSON.parse(localStorage.getItem('nebula_presets')) || Array(6).fill(null).map(() => ({
+            pattern: Array(64).fill(false),
+            mode: 'static'
+        }));
+
+        let isDrawing = false;
+        let targetPaintState = true;
+
+        document.addEventListener('pointerup', () => { isDrawing = false; });
+
+        function saveCurrentState() {
+            localStorage.setItem('nebula_matrix', JSON.stringify(matrixData));
+            localStorage.setItem('nebula_mode', document.getElementById('animMode').value);
+            localStorage.setItem('nebula_presets', JSON.stringify(presets));
+        }
+
+        function buildGrid() {
+            const gridEl = document.getElementById('matrixGrid');
+            gridEl.innerHTML = '';
+            for (let i = 0; i < 64; i++) {
                 const cell = document.createElement('div');
-                cell.classList.add('matrix-cell');
-                cell.dataset.row = r;
-                cell.dataset.col = c;
-                cell.addEventListener('click', () => toggleCell(r, c, cell));
-                gridElement.appendChild(cell);
+                cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
+                
+                cell.onpointerdown = (e) => {
+                    e.preventDefault();
+                    isDrawing = true;
+                    targetPaintState = !matrixData[i];
+                    matrixData[i] = targetPaintState;
+                    cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
+                    saveCurrentState();
+                };
+
+                cell.onpointerenter = () => {
+                    if (isDrawing) {
+                        matrixData[i] = targetPaintState;
+                        cell.className = 'matrix-cell' + (matrixData[i] ? ' active' : '');
+                        saveCurrentState();
+                    }
+                };
+
+                gridEl.appendChild(cell);
             }
         }
 
-        function toggleCell(r, c, cellElement) {
-            matrixData[r][c] = matrixData[r][c] === 1 ? 0 : 1;
-            cellElement.classList.toggle('active');
-            sendMatrixToESP32();
+        function getModeDisplayName(mode) {
+            switch(mode) {
+                case 'static': return 'Static';
+                case 'blink': return 'Flash';
+                case 'refresh': return 'Sweep';
+                case 'pulse': return 'Pulse';
+                case 'inside-out': return 'Inside-Out';
+                case 'outside-in': return 'Outside-In';
+                default: return 'Static';
+            }
         }
 
-        document.getElementById('clearMatrixBtn').addEventListener('click', () => {
-            for (let r = 0; r < 8; r++) {
-                for (let c = 0; c < 8; c++) {
-                    matrixData[r][c] = 0;
+        function buildPresetUI() {
+            const container = document.getElementById('presetsContainer');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 6; i++) {
+                const card = document.createElement('div');
+                card.className = 'preset-card';
+
+                const header = document.createElement('div');
+                header.className = 'preset-header';
+
+                const title = document.createElement('div');
+                title.className = 'preset-title';
+                title.innerText = `Slot ${i + 1}`;
+                header.appendChild(title);
+
+                const modeTag = document.createElement('div');
+                modeTag.className = 'preset-mode-tag';
+                modeTag.innerText = getModeDisplayName(presets[i].mode);
+                header.appendChild(modeTag);
+
+                card.appendChild(header);
+
+                const miniGrid = document.createElement('div');
+                miniGrid.className = 'mini-grid';
+                miniGrid.id = `miniGrid-${i}`;
+                for (let p = 0; p < 64; p++) {
+                    const miniCell = document.createElement('div');
+                    miniCell.className = 'mini-cell' + (presets[i].pattern[p] ? ' active' : '');
+                    miniGrid.appendChild(miniCell);
                 }
+                
+                miniGrid.onclick = () => {
+                    matrixData = [...presets[i].pattern];
+                    document.getElementById('animMode').value = presets[i].mode;
+                    buildGrid();
+                    saveCurrentState();
+                };
+                card.appendChild(miniGrid);
+
+                const saveBtn = document.createElement('button');
+                saveBtn.className = 'btn-save';
+                saveBtn.innerText = 'Save';
+                saveBtn.onclick = () => savePreset(i + 1);
+                card.appendChild(saveBtn);
+
+                container.appendChild(card);
             }
-            document.querySelectorAll('.matrix-cell').forEach(cell => cell.classList.remove('active'));
-            sendMatrixToESP32();
+            updateMiniGridPreviews();
+        }
+
+        function updateMiniGridPreviews() {
+            if (previewInterval) clearInterval(previewInterval);
+            
+            previewInterval = setInterval(() => {
+                animTick++;
+                for (let i = 0; i < 6; i++) {
+                    const gridEl = document.getElementById(`miniGrid-${i}`);
+                    if (!gridEl) continue;
+                    const cells = gridEl.children;
+                    const p = presets[i];
+                    const patternToUse = p.pattern;
+
+                    for (let r = 0; r < 8; r++) {
+                        for (let c = 0; c < 8; c++) {
+                            let idx = r * 8 + c;
+                            let cellEl = cells[idx];
+                            if (!cellEl) continue;
+                            
+                            let baseActive = patternToUse[idx];
+                            let active = baseActive;
+
+                            if (p.mode === 'blink') {
+                                active = baseActive && (Math.floor(animTick / 3) % 2 === 0);
+                            } else if (p.mode === 'pulse') {
+                                active = baseActive && (Math.floor(animTick / 2) % 2 === 0);
+                            } else if (p.mode === 'refresh') {
+                                let sweepRow = animTick % 8;
+                                active = baseActive && (r === sweepRow);
+                            } else if (p.mode === 'inside-out') {
+                                let dist = Math.min(r, c, 7 - r, 7 - c);
+                                let step = (animTick % 4);
+                                active = baseActive && (dist >= (3 - step));
+                            } else if (p.mode === 'outside-in') {
+                                let dist = Math.min(r, c, 7 - r, 7 - c);
+                                let step = (animTick % 4);
+                                active = baseActive && (dist <= step);
+                            }
+
+                            if (active) {
+                                cellEl.classList.add('active');
+                            } else {
+                                cellEl.classList.remove('active');
+                            }
+                        }
+                    }
+                }
+            }, 150);
+        }
+
+        function clearMatrix() {
+            matrixData.fill(false);
+            buildGrid();
+            saveCurrentState();
+        }
+
+        const track = document.getElementById('sliderTrack');
+        const fill = document.getElementById('sliderFill');
+        const thumb = document.getElementById('sliderThumb');
+        const yValSpan = document.getElementById('yVal');
+
+        function updateSliderVisuals(percentVal) {
+            let displayVal = Math.round((percentVal - 50) * 2);
+            yValSpan.innerText = displayVal;
+            
+            thumb.style.top = `${100 - percentVal}%`;
+
+            if (percentVal > 50) {
+                fill.style.top = `${100 - percentVal}%`;
+                fill.style.bottom = `50%`;
+                fill.style.backgroundColor = '#2196f3';
+            } else if (percentVal < 50) {
+                fill.style.top = `50%`;
+                fill.style.bottom = `${percentVal}%`;
+                fill.style.backgroundColor = '#f44336';
+            } else {
+                fill.style.top = `50%`;
+                fill.style.bottom = `50%`;
+                fill.style.backgroundColor = 'transparent';
+            }
+        }
+
+        function handleSliderMove(e) {
+            const rect = track.getBoundingClientRect();
+            let clientY = e.clientY;
+            let offsetY = clientY - rect.top;
+            offsetY = Math.max(0, Math.min(rect.height, offsetY));
+
+            let percentVal = Math.round(100 - (offsetY / rect.height) * 100);
+            updateSliderVisuals(percentVal);
+        }
+
+        track.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            track.setPointerCapture(e.pointerId);
+            handleSliderMove(e);
+            
+            track.onpointermove = (ev) => handleSliderMove(ev);
+            track.onpointerup = (ev) => {
+                track.releasePointerCapture(ev.pointerId);
+                track.onpointermove = null;
+                track.onpointerup = null;
+                updateSliderVisuals(50);
+            };
         });
 
-        // BLE Connection Flow
-        document.getElementById('connectBtn').addEventListener('click', async () => {
+        updateSliderVisuals(50);
+
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+
+        leftBtn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            leftBtn.setPointerCapture(e.pointerId);
+            leftBtn.style.backgroundColor = '#1e88e5';
+        });
+        leftBtn.addEventListener('pointerup', (e) => {
+            leftBtn.releasePointerCapture(e.pointerId);
+            leftBtn.style.backgroundColor = '#37474f';
+        });
+
+        rightBtn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            rightBtn.setPointerCapture(e.pointerId);
+            rightBtn.style.backgroundColor = '#1e88e5';
+        });
+        rightBtn.addEventListener('pointerup', (e) => {
+            rightBtn.releasePointerCapture(e.pointerId);
+            rightBtn.style.backgroundColor = '#37474f';
+        });
+
+        const pressedKeys = new Set();
+        const validKeys = [
+            'Space', 'KeyW', 'KeyS', 'KeyA', 'KeyD', 
+            'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 
+            'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6',
+            'Escape'
+        ];
+
+        window.addEventListener('keydown', (e) => {
+            if (validKeys.includes(e.code)) {
+                e.preventDefault();
+            }
+
+            if (e.code === 'Escape') emergencyStop();
+            if (e.code === 'Digit1') playPreset(1);
+            if (e.code === 'Digit2') playPreset(2);
+            if (e.code === 'Digit3') playPreset(3);
+            if (e.code === 'Digit4') playPreset(4);
+            if (e.code === 'Digit5') playPreset(5);
+            if (e.code === 'Digit6') playPreset(6);
+
+            pressedKeys.add(e.code);
+            evaluateKeyboardControls();
+        });
+
+        window.addEventListener('keyup', (e) => {
+            pressedKeys.delete(e.code);
+            evaluateKeyboardControls();
+        });
+
+        function evaluateKeyboardControls() {
+            let isBoosting = pressedKeys.has('Space');
+            let forwardPressed = pressedKeys.has('KeyW') || pressedKeys.has('ArrowUp');
+            let backwardPressed = pressedKeys.has('KeyS') || pressedKeys.has('ArrowDown');
+            let leftPressed = pressedKeys.has('KeyA') || pressedKeys.has('ArrowLeft');
+            let rightPressed = pressedKeys.has('KeyD') || pressedKeys.has('ArrowRight');
+            
+            let throttlePercent = 50; 
+            if (forwardPressed && !backwardPressed) {
+                throttlePercent = isBoosting ? 100 : 75;
+            } else if (backwardPressed && !forwardPressed) {
+                throttlePercent = isBoosting ? 0 : 25;
+            }
+            updateSliderVisuals(throttlePercent);
+
+            if (leftPressed) {
+                leftBtn.style.backgroundColor = '#1e88e5';
+            } else {
+                leftBtn.style.backgroundColor = '#37474f';
+            }
+
+            if (rightPressed) {
+                rightBtn.style.backgroundColor = '#1e88e5';
+            } else {
+                rightBtn.style.backgroundColor = '#37474f';
+            }
+        }
+
+        async function emergencyStop() {
+            updateSliderVisuals(50);
+            pressedKeys.clear();
+            if (bluetoothCharacteristic) {
+                try {
+                    const encoder = new TextEncoder();
+                    await bluetoothCharacteristic.writeValue(encoder.encode("CMD:ESTOP"));
+                } catch (err) {
+                    console.error("E-Stop transmission error:", err);
+                }
+            }
+            const statusEl = document.getElementById('status');
+            statusEl.innerText = "Status: EMERGENCY STOP";
+            statusEl.style.color = "#ef5350";
+        }
+
+        async function connectBluetooth() {
+            const statusEl = document.getElementById('status');
+            const connectBtnEl = document.getElementById('connectBtn');
+
+            if (!navigator.bluetooth) {
+                statusEl.innerText = "Status: Bluetooth unsupported on iOS!";
+                statusEl.style.color = "#ef5350";
+                alert("Web Bluetooth is not supported in standard iOS/iPadOS browsers. Please use a Web BLE browser app from the App Store (such as 'Bluefy' or 'BLE Link') to connect your ESP32.");
+                return;
+            }
+
             try {
-                document.getElementById('status').innerText = "Status: Connecting...";
+                statusEl.innerText = "Status: Scanning...";
+                statusEl.classList.remove('connected');
                 
                 bluetoothDevice = await navigator.bluetooth.requestDevice({
-                    filters: [{ name: 'Nebula Controller' }],
-                    optionalServices: [SERVICE_UUID]
+                    filters: [{ services: [SERVICE_UUID] }]
                 });
 
                 const server = await bluetoothDevice.gatt.connect();
                 const service = await server.getPrimaryService(SERVICE_UUID);
-                bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+                bluetoothCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                // Start listening for incoming IMU telemetry notifications
-                await bleCharacteristic.startNotifications();
-                bleCharacteristic.addEventListener('characteristicvaluechanged', handleIMUData);
+                // Listen for telemetry data from ESP32 notifications (expects format like "T:1.2,14.8")
+                await bluetoothCharacteristic.startNotifications();
+                bluetoothCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+                    const value = event.target.value;
+                    const text = new TextDecoder().decode(value);
+                    if (text.startsWith("T:")) {
+                        let parts = text.substring(2).split(',');
+                        if (parts[0]) document.getElementById('telemetryPitch').innerText = parts[0] + '°';
+                        if (parts[1]) document.getElementById('telemetryBattery').innerText = parts[1] + 'V';
+                    }
+                });
 
-                document.getElementById('status').innerText = "Status: Connected & Streaming";
-                document.getElementById('connectBtn').style.backgroundColor = "#28a745";
-                document.getElementById('connectBtn').innerText = "Connected";
-
+                statusEl.innerText = "Status: Connected!";
+                statusEl.classList.add('connected');
+                connectBtnEl.innerText = "Connected";
+                connectBtnEl.style.backgroundColor = "#555";
             } catch (error) {
-                console.error("Connection failed:", error);
-                document.getElementById('status').innerText = "Status: Connection Failed";
-            }
-        });
-
-        // Parse incoming IMU data notifications from ESP32
-        function handleIMUData(event) {
-            const valueStr = new TextDecoder().decode(event.target.value);
-            
-            if (valueStr.startsWith("IMU:")) {
-                const rawData = valueStr.substring(4); // Strip "IMU:" prefix
-                const parts = rawData.split(',');
-
-                if (parts.length === 6) {
-                    document.getElementById('accelX').innerText = parseFloat(parts[0]).toFixed(3);
-                    document.getElementById('accelY').innerText = parseFloat(parts[1]).toFixed(3);
-                    document.getElementById('accelZ').innerText = parseFloat(parts[2]).toFixed(3);
-                    
-                    document.getElementById('gyroX').innerText = parseFloat(parts[3]).toFixed(2);
-                    document.getElementById('gyroY').innerText = parseFloat(parts[4]).toFixed(2);
-                    document.getElementById('gyroZ').innerText = parseFloat(parts[5]).toFixed(2);
-                }
+                console.error(error);
+                statusEl.innerText = "Status: Connection Failed";
+                statusEl.style.color = "#ef5350";
             }
         }
 
-        // Send matrix bitmask rows to ESP32 via BLE Write
-        async function sendMatrixToESP32() {
-            if (!bleCharacteristic) return;
+        function savePreset(presetId) {
+            let index = presetId - 1;
+            presets[index].pattern = [...matrixData];
+            presets[index].mode = document.getElementById('animMode').value;
+            buildPresetUI();
+            saveCurrentState();
+            playPreset(presetId);
+        }
 
-            let rowValues = [];
-            for (let r = 0; r < 8; r++) {
-                let byteVal = 0;
-                for (let c = 0; c < 8; c++) {
-                    if (matrixData[r][c] === 1) {
-                        byteVal |= (1 << (7 - c));
+        async function playPreset(presetId) {
+            let index = presetId - 1;
+            matrixData = [...presets[index].pattern];
+            document.getElementById('animMode').value = presets[index].mode;
+            buildGrid();
+            saveCurrentState();
+
+            const mode = presets[index].mode;
+            const pattern = presets[index].pattern;
+
+            if (activeAnimationInterval) {
+                clearInterval(activeAnimationInterval);
+                activeAnimationInterval = null;
+            }
+
+            async function sendRows(rowsArray) {
+                if (!bluetoothCharacteristic) return;
+                let payload = "R:" + rowsArray.join(',');
+                try {
+                    const encoder = new TextEncoder();
+                    await bluetoothCharacteristic.writeValue(encoder.encode(payload));
+                } catch (err) {
+                    console.error("Transmission error:", err);
+                }
+            }
+
+            let getRowBytesForMatrix = (customPattern, filterFn = null) => {
+                let rotated = Array(64).fill(false);
+                for (let r = 0; r < 8; r++) {
+                    for (let c = 0; c < 8; c++) {
+                        if (customPattern[r * 8 + c]) {
+                            if (!filterFn || filterFn(r, c)) {
+                                let new_r = 7 - r;
+                                let new_c = 7 - c;
+                                rotated[new_r * 8 + new_c] = true;
+                            }
+                        }
                     }
                 }
-                rowValues.push(byteVal);
-            }
+                let rows = [];
+                for (let r = 0; r < 8; r++) {
+                    let byteVal = 0;
+                    for (let c = 0; c < 8; c++) {
+                        if (rotated[r * 8 + c]) byteVal |= (1 << (7 - c));
+                    }
+                    rows.push(byteVal);
+                }
+                return rows;
+            };
 
-            const payload = "R:" + rowValues.join(',');
-            try {
-                const encoder = new TextEncoder();
-                await bleCharacteristic.writeValue(encoder.encode(payload));
-            } catch (error) {
-                console.error("Error sending matrix data:", error);
+            let baseRows = getRowBytesForMatrix(pattern);
+            let emptyRows = [0, 0, 0, 0, 0, 0, 0, 0];
+
+            if (mode === 'static') {
+                await sendRows(baseRows);
+            } 
+            else if (mode === 'blink') {
+                let state = true;
+                await sendRows(baseRows);
+                activeAnimationInterval = setInterval(async () => {
+                    await sendRows(state ? emptyRows : baseRows);
+                    state = !state;
+                }, 500);
+            } 
+            else if (mode === 'refresh') {
+                let sweepRow = 0;
+                activeAnimationInterval = setInterval(async () => {
+                    let frame = [...emptyRows];
+                    frame[sweepRow] = baseRows[sweepRow];
+                    await sendRows(frame);
+                    sweepRow++;
+                    if (sweepRow > 7) sweepRow = 0;
+                }, 100);
+            }
+            else if (mode === 'pulse') {
+                let visible = true;
+                activeAnimationInterval = setInterval(async () => {
+                    await sendRows(visible ? baseRows : emptyRows);
+                    visible = !visible;
+                }, 150);
+            }
+            else if (mode === 'inside-out') {
+                let step = 0;
+                activeAnimationInterval = setInterval(async () => {
+                    let rows = getRowBytesForMatrix(pattern, (r, c) => {
+                        let dist = Math.min(r, c, 7 - r, 7 - c);
+                        return dist >= (3 - step);
+                    });
+                    await sendRows(rows);
+                    step = (step + 1) % 4;
+                }, 150);
+            }
+            else if (mode === 'outside-in') {
+                let step = 0;
+                activeAnimationInterval = setInterval(async () => {
+                    let rows = getRowBytesForMatrix(pattern, (r, c) => {
+                        let dist = Math.min(r, c, 7 - r, 7 - c);
+                        return dist <= step;
+                    });
+                    await sendRows(rows);
+                    step = (step + 1) % 4;
+                }, 150);
             }
         }
+
+        buildGrid();
+        buildPresetUI();
     </script>
 </body>
 </html>
