@@ -86,7 +86,7 @@
             font-weight: bold;
         }
         .telemetry-box {
-            margin-top: 6px;
+            margin-top: 4px;
             width: 100%;
             background: #222;
             border: 1px solid #444;
@@ -178,8 +178,8 @@
             display: flex;
             gap: 12px;
             flex-direction: row;
-            height: 120px;
-            margin-bottom: 12px;
+            height: 100px;
+            margin-bottom: 8px;
             width: 100%;
         }
         .turn-buttons button {
@@ -361,7 +361,7 @@
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
-        <!-- 2. MIDDLE PANEL: Steering Control & Quick Display -->
+        <!-- 2. MIDDLE PANEL: Steering Control & Telemetry -->
         <div class="container">
             <h3 class="panel-title">Steering & Quick Display</h3>
             <div class="turn-group">
@@ -371,7 +371,16 @@
                     <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
                 </div>
 
-                <label style="margin-top: 8px;">Quick Presets (1-6)</label>
+                <!-- IMU & Battery Telemetry Box Moved Here -->
+                <div class="telemetry-box">
+                    <div style="font-size: 11px; color: #ff8a65; font-weight: bold; margin-bottom: 4px;">IMU & Battery Telemetry</div>
+                    <div style="display: flex; justify-content: space-around; font-size: 12px; color: #b0bec5;">
+                        <span>Pitch: <strong id="telemetryPitch" style="color: #fff;">0.0°</strong></span>
+                        <span>Batt: <strong id="telemetryBattery" style="color: #fff;">--V</strong></span>
+                    </div>
+                </div>
+
+                <label style="margin-top: 10px;">Quick Presets (1-6)</label>
                 <div class="quick-presets-grid">
                     <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
                     <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="padding:1px 4px;">[2]</span></button>
@@ -390,15 +399,6 @@
                 <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
                 <button id="estopBtn" onclick="emergencyStop()">EMERGENCY STOP <span class="key-hint" style="background:rgba(0,0,0,0.2); color:#fff;">[Esc]</span></button>
                 <div id="status">Status: Disconnected</div>
-                
-                <!-- Telemetry Readout Panel -->
-                <div class="telemetry-box">
-                    <div style="font-size: 11px; color: #ff8a65; font-weight: bold; margin-bottom: 4px;">IMU & Battery Telemetry</div>
-                    <div style="display: flex; justify-content: space-around; font-size: 12px; color: #b0bec5;">
-                        <span>Pitch: <strong id="telemetryPitch" style="color: #fff;">0.0°</strong></span>
-                        <span>Batt: <strong id="telemetryBattery" style="color: #fff;">--V</strong></span>
-                    </div>
-                </div>
             </div>
 
             <div class="slider-section">
@@ -761,7 +761,6 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bluetoothCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-                // Listen for telemetry data from ESP32 notifications (expects format like "T:1.2,14.8")
                 await bluetoothCharacteristic.startNotifications();
                 bluetoothCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
                     const value = event.target.value;
