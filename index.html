@@ -10,6 +10,7 @@
             color: #ffffff;
             text-align: center;
             padding: 20px;
+            margin: 0;
         }
         button {
             padding: 12px 24px;
@@ -27,11 +28,13 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
+            padding-bottom: 40px;
         }
         .section-title {
             margin-top: 30px;
             color: #00adb5;
         }
+        
         /* Horizontal Layout for IMU Axes */
         .horizontal-axis-row {
             display: flex;
@@ -57,6 +60,30 @@
             font-weight: bold;
             color: #00adb5;
         }
+
+        /* LED Matrix Grid Designer Styles */
+        .matrix-container {
+            display: inline-grid;
+            grid-template-columns: repeat(8, 45px);
+            grid-template-rows: repeat(8, 45px);
+            gap: 5px;
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin-top: 15px;
+        }
+        .matrix-cell {
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        .matrix-cell.active {
+            background-color: #ff2e63;
+            box-shadow: 0 0 8px #ff2e63;
+        }
     </style>
 </head>
 <body>
@@ -66,7 +93,9 @@
         <button id="connectBtn">Connect to Nebula BLE</button>
         <p id="status">Status: Disconnected</p>
 
-        <h2 class="section-title">Accelerometer Data (g)</h2>
+        <!-- IMU TELEMETRY SECTION -->
+        <h2 class="section-title">IMU Sensor Telemetry</h2>
+        
         <div class="horizontal-axis-row">
             <div class="axis-card">
                 <h3>Accel X</h3>
@@ -78,11 +107,10 @@
             </div>
             <div class="axis-card">
                 <h3>Accel Z</h3>
-                <div id="accelZ" class="axis-value">0.000</div>
+                <div id="accelZ" class="axis-value">1.000</div>
             </div>
         </div>
 
-        <h2 class="section-title">Gyroscope Data (°/s)</h2>
         <div class="horizontal-axis-row">
             <div class="axis-card">
                 <h3>Gyro X</h3>
@@ -97,6 +125,13 @@
                 <div id="gyroZ" class="axis-value">0.00</div>
             </div>
         </div>
+
+        <!-- LED MATRIX DESIGNER SECTION -->
+        <h2 class="section-title">LED Matrix Designer</h2>
+        <div class="matrix-container" id="matrixGrid"></div>
+        <div>
+            <button id="clearMatrixBtn" style="background-color: #d9534f; margin-top: 15px;">Clear Matrix</button>
+        </div>
     </div>
 
     <script>
@@ -106,6 +141,39 @@
         const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
         const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a6";
 
+        // Matrix state grid (8 rows x 8 cols)
+        const matrixData = Array(8).fill(0).map(() => Array(8).fill(0));
+
+        // Build 8x8 Grid UI
+        const gridElement = document.getElementById('matrixGrid');
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                const cell = document.createElement('div');
+                cell.classList.add('matrix-cell');
+                cell.dataset.row = r;
+                cell.dataset.col = c;
+                cell.addEventListener('click', () => toggleCell(r, c, cell));
+                gridElement.appendChild(cell);
+            }
+        }
+
+        function toggleCell(r, c, cellElement) {
+            matrixData[r][c] = matrixData[r][c] === 1 ? 0 : 1;
+            cellElement.classList.toggle('active');
+            sendMatrixToESP32();
+        }
+
+        document.getElementById('clearMatrixBtn').addEventListener('click', () => {
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    matrixData[r][c] = 0;
+                }
+            }
+            document.querySelectorAll('.matrix-cell').forEach(cell => cell.classList.remove('active'));
+            sendMatrixToESP32();
+        });
+
+        // BLE Connection Flow
         document.getElementById('connectBtn').addEventListener('click', async () => {
             try {
                 document.getElementById('status').innerText = "Status: Connecting...";
@@ -133,15 +201,15 @@
             }
         });
 
+        // Parse incoming IMU data notifications from ESP32
         function handleIMUData(event) {
             const valueStr = new TextDecoder().decode(event.target.value);
             
             if (valueStr.startsWith("IMU:")) {
-                const rawData = valueStr.substring(4); // Strip "IMU:"
+                const rawData = valueStr.substring(4); // Strip "IMU:" prefix
                 const parts = rawData.split(',');
 
                 if (parts.length === 6) {
-                    // Update the horizontal card values dynamically
                     document.getElementById('accelX').innerText = parseFloat(parts[0]).toFixed(3);
                     document.getElementById('accelY').innerText = parseFloat(parts[1]).toFixed(3);
                     document.getElementById('accelZ').innerText = parseFloat(parts[2]).toFixed(3);
@@ -150,6 +218,30 @@
                     document.getElementById('gyroY').innerText = parseFloat(parts[4]).toFixed(2);
                     document.getElementById('gyroZ').innerText = parseFloat(parts[5]).toFixed(2);
                 }
+            }
+        }
+
+        // Send matrix bitmask rows to ESP32 via BLE Write
+        async function sendMatrixToESP32() {
+            if (!bleCharacteristic) return;
+
+            let rowValues = [];
+            for (let r = 0; r < 8; r++) {
+                let byteVal = 0;
+                for (let c = 0; c < 8; c++) {
+                    if (matrixData[r][c] === 1) {
+                        byteVal |= (1 << (7 - c));
+                    }
+                }
+                rowValues.push(byteVal);
+            }
+
+            const payload = "R:" + rowValues.join(',');
+            try {
+                const encoder = new TextEncoder();
+                await bleCharacteristic.writeValue(encoder.encode(payload));
+            } catch (error) {
+                console.error("Error sending matrix data:", error);
             }
         }
     </script>
