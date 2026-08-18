@@ -86,12 +86,12 @@
             font-weight: bold;
         }
         .telemetry-box {
-            margin-top: 4px;
+            margin-top: 6px;
             width: 100%;
             background: #222;
             border: 1px solid #444;
             border-radius: 8px;
-            padding: 8px 10px;
+            padding: 10px;
             box-sizing: border-box;
         }
         .slider-section {
@@ -179,7 +179,7 @@
             gap: 12px;
             flex-direction: row;
             height: 100px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             width: 100%;
         }
         .turn-buttons button {
@@ -361,7 +361,7 @@
             <div class="presets-container" id="presetsContainer"></div>
         </div>
 
-        <!-- 2. MIDDLE PANEL: Steering Control & Telemetry -->
+        <!-- 2. MIDDLE PANEL: Steering Control & Live Telemetry -->
         <div class="container">
             <h3 class="panel-title">Steering & Quick Display</h3>
             <div class="turn-group">
@@ -371,12 +371,22 @@
                     <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
                 </div>
 
-                <!-- IMU & Battery Telemetry Box Moved Here -->
+                <!-- IMU & Battery Telemetry Box (Both Horizontal Tilt Axes + Battery, Bigger Text) -->
                 <div class="telemetry-box">
-                    <div style="font-size: 11px; color: #ff8a65; font-weight: bold; margin-bottom: 4px;">IMU & Battery Telemetry</div>
-                    <div style="display: flex; justify-content: space-around; font-size: 12px; color: #b0bec5;">
-                        <span>Pitch: <strong id="telemetryPitch" style="color: #fff;">0.0°</strong></span>
-                        <span>Batt: <strong id="telemetryBattery" style="color: #fff;">--V</strong></span>
+                    <div style="font-size: 12px; color: #ff8a65; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Live Telemetry</div>
+                    <div style="display: flex; justify-content: space-between; gap: 6px;">
+                        <div style="flex: 1; background: #161616; padding: 8px 4px; border-radius: 6px; border: 1px solid #333;">
+                            <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Pitch</div>
+                            <strong id="telemetryPitch" style="color: #fff; font-size: 15px;">0.0°</strong>
+                        </div>
+                        <div style="flex: 1; background: #161616; padding: 8px 4px; border-radius: 6px; border: 1px solid #333;">
+                            <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Roll</div>
+                            <strong id="telemetryRoll" style="color: #fff; font-size: 15px;">0.0°</strong>
+                        </div>
+                        <div style="flex: 1; background: #161616; padding: 8px 4px; border-radius: 6px; border: 1px solid #333;">
+                            <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Battery</div>
+                            <strong id="telemetryBattery" style="color: #fff; font-size: 15px;">--V</strong>
+                        </div>
                     </div>
                 </div>
 
@@ -761,6 +771,7 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bluetoothCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
+                // Expected ESP32 telemetry string format: "T:pitch,roll,battery" (e.g. "T:1.2,-0.5,14.8")
                 await bluetoothCharacteristic.startNotifications();
                 bluetoothCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
                     const value = event.target.value;
@@ -768,7 +779,8 @@
                     if (text.startsWith("T:")) {
                         let parts = text.substring(2).split(',');
                         if (parts[0]) document.getElementById('telemetryPitch').innerText = parts[0] + '°';
-                        if (parts[1]) document.getElementById('telemetryBattery').innerText = parts[1] + 'V';
+                        if (parts[1]) document.getElementById('telemetryRoll').innerText = parts[1] + '°';
+                        if (parts[2]) document.getElementById('telemetryBattery').innerText = parts[2] + 'V';
                     }
                 });
 
