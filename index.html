@@ -334,6 +334,13 @@
                 flex: 1;
             }
         }
+        .metric-group { margin-bottom: 20px; text-align: left; }
+        .metric-label { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; color: #444; margin-bottom: 5px; }
+        .bar-container { background-color: #e9ecef; border-radius: 6px; height: 16px; width: 100%; overflow: hidden; position: relative; }
+        .bar-fill { height: 100%; width: 0%; transition: width 0.1s ease-in-out; border-radius: 6px; }
+        #distance-fill { background-color: #28a745; }
+        #pitch-fill { background-color: #17a2b8; }
+        #roll-fill { background-color: #ffc107; }
     </style>
 </head>
 <body>
@@ -398,6 +405,38 @@
                     <button class="quick-btn" onclick="playPreset(4)">P4 <span class="key-hint" style="padding:1px 4px;">[4]</span></button>
                     <button class="quick-btn" onclick="playPreset(5)">P5 <span class="key-hint" style="padding:1px 4px;">[5]</span></button>
                     <button class="quick-btn" onclick="playPreset(6)">P6 <span class="key-hint" style="padding:1px 4px;">[6]</span></button>
+                </div>
+            </div>
+                        <!-- Distance Section -->
+            <div class="metric-group">
+                <div class="metric-label">
+                    <span>Distance</span>
+                    <span id="distance-val">-- cm</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="distance-fill"></div>
+                </div>
+            </div>
+            
+            <!-- Pitch Section -->
+            <div class="metric-group">
+                <div class="metric-label">
+                    <span>Pitch (Tilt)</span>
+                    <span id="pitch-val">--°</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="pitch-fill"></div>
+                </div>
+            </div>
+            
+            <!-- Roll Section -->
+            <div class="metric-group">
+                <div class="metric-label">
+                    <span>Roll (Tilt)</span>
+                    <span id="roll-val">--°</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="roll-fill"></div>
                 </div>
             </div>
         </div>
