@@ -344,44 +344,49 @@
     #roll-fill { background-color: #ffc107; }
 </style>
 </head>
-<body>
-
-    <div class="dashboard">
-        <!-- 1. LEFT PANEL: LED Matrix Designer & Save Slots -->
-        <div class="container">
-            <h3 class="panel-title">LED Matrix Designer</h3>
-            
-            <div class="matrix-grid" id="matrixGrid"></div>
-
-            <div class="controls-row">
-                <select id="animMode" onchange="saveCurrentState()">
-                    <option value="static">Static</option>
-                    <option value="blink">Flash (Blink)</option>
-                    <option value="refresh">Sweep (Refresh)</option>
-                    <option value="pulse">Pulse</option>
-                    <option value="inside-out">Inside Out</option>
-                    <option value="outside-in">Outside In</option>
-                </select>
-                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 14px; margin:0;">Clear</button>
-            </div>
-
-            <div style="font-size: 12px; color: #ff8a65; font-weight: bold; text-align: left; width: 100%; margin-top: 4px;">Save Presets:</div>
-            <div class="presets-container" id="presetsContainer"></div>
-        </div>
-
-        <!-- 2. MIDDLE PANEL: Steering Control & Live Telemetry -->
-        <div class="container">
-            <h3 class="panel-title">Steering & Quick Display</h3>
-            <div class="turn-group">
-                <label>Turning Direction</label>
-                <div class="turn-buttons">
-                    <button id="leftBtn">&#9664; Left <span class="key-hint">[A] [&larr;]</span></button>
-                    <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
+    <body>
+    
+        <div class="dashboard">
+    
+            <!-- ================= 1. LEFT PANEL: LED Matrix Designer ================= -->
+            <div class="dashboard-box">
+                <h2 class="ui-title">LED Matrix Designer</h2>
+                <div class="ui-subtitle">Pattern & Animation Studio</div>
+                
+                <div class="matrix-grid" id="matrixGrid"></div>
+    
+                <div class="controls-row">
+                    <select id="animMode" onchange="saveCurrentState()">
+                        <option value="static">Static</option>
+                        <option value="blink">Flash (Blink)</option>
+                        <option value="refresh">Sweep (Refresh)</option>
+                        <option value="pulse">Pulse</option>
+                        <option value="inside-out">Inside Out</option>
+                        <option value="outside-in">Outside In</option>
+                    </select>
+                    <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 14px; margin:0;">Clear</button>
                 </div>
-
-                <!-- IMU & Battery Telemetry Box (Both Horizontal Tilt Axes + Battery, Bigger Text) -->
+    
+                <div class="ui-subtitle" style="margin-top: 10px;">Save Presets</div>
+                <div class="presets-container" id="presetsContainer"></div>
+            </div>
+    
+            <!-- ================= 2. MIDDLE PANEL: Steering, Telemetry & Metrics ================= -->
+            <div class="dashboard-box">
+                <h2 class="ui-title">Steering & Quick Display</h2>
+                <div class="ui-subtitle">Navigation & Feedback</div>
+                
+                <div class="turn-group">
+                    <label>Turning Direction</label>
+                    <div class="turn-buttons">
+                        <button id="leftBtn">&#9664; Left <span class="key-hint">[A] [&larr;]</span></button>
+                        <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
+                    </div>
+                </div>
+    
+                <!-- IMU & Battery Telemetry Box -->
                 <div class="telemetry-box">
-                    <div style="font-size: 12px; color: #ff8a65; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Live Telemetry</div>
+                    <div class="ui-subtitle" style="margin-bottom: 8px;">Live Telemetry</div>
                     <div style="display: flex; justify-content: space-between; gap: 6px;">
                         <div style="flex: 1; background: #161616; padding: 8px 4px; border-radius: 6px; border: 1px solid #333;">
                             <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Pitch</div>
@@ -397,7 +402,7 @@
                         </div>
                     </div>
                 </div>
-
+    
                 <label style="margin-top: 10px;">Quick Presets (1-6)</label>
                 <div class="quick-presets-grid">
                     <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
@@ -407,61 +412,64 @@
                     <button class="quick-btn" onclick="playPreset(5)">P5 <span class="key-hint" style="padding:1px 4px;">[5]</span></button>
                     <button class="quick-btn" onclick="playPreset(6)">P6 <span class="key-hint" style="padding:1px 4px;">[6]</span></button>
                 </div>
+    
+                <!-- Distance Section -->
+                <div class="metric-group" style="width: 100%; margin-top: 10px;">
+                    <div class="metric-label">
+                        <span>Distance</span>
+                        <span id="distance-val">-- cm</span>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-fill" id="distance-fill"></div>
+                    </div>
+                </div>
+                
+                <!-- Pitch Section -->
+                <div class="metric-group" style="width: 100%;">
+                    <div class="metric-label">
+                        <span>Pitch (Tilt)</span>
+                        <span id="pitch-val">--°</span>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-fill" id="pitch-fill"></div>
+                    </div>
+                </div>
+                
+                <!-- Roll Section -->
+                <div class="metric-group" style="width: 100%;">
+                    <div class="metric-label">
+                        <span>Roll (Tilt)</span>
+                        <span id="roll-val">--°</span>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar-fill" id="roll-fill"></div>
+                    </div>
+                </div>
             </div>
-                        <!-- Distance Section -->
-            <div class="metric-group">
-                <div class="metric-label">
-                    <span>Distance</span>
-                    <span id="distance-val">-- cm</span>
+    
+            <!-- ================= 3. RIGHT PANEL: Nebula Control & Throttle ================= -->
+            <div class="dashboard-box">
+                <h2 class="ui-title">Nebula Control</h2>
+                <div class="ui-subtitle">System & Throttle</div>
+    
+                <div style="width: 100%;">
+                    <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
+                    <button id="estopBtn" onclick="emergencyStop()">EMERGENCY STOP <span class="key-hint" style="background:rgba(0,0,0,0.2); color:#fff;">[Esc]</span></button>
+                    <div id="status">Status: Disconnected</div>
                 </div>
-                <div class="bar-container">
-                    <div class="bar-fill" id="distance-fill"></div>
-                </div>
-            </div>
-            
-            <!-- Pitch Section -->
-            <div class="metric-group">
-                <div class="metric-label">
-                    <span>Pitch (Tilt)</span>
-                    <span id="pitch-val">--°</span>
-                </div>
-                <div class="bar-container">
-                    <div class="bar-fill" id="pitch-fill"></div>
-                </div>
-            </div>
-            
-            <!-- Roll Section -->
-            <div class="metric-group">
-                <div class="metric-label">
-                    <span>Roll (Tilt)</span>
-                    <span id="roll-val">--°</span>
-                </div>
-                <div class="bar-container">
-                    <div class="bar-fill" id="roll-fill"></div>
+    
+                <div class="slider-section">
+                    <label>Throttle (Y): <span id="yVal">0</span></label>
+                    <div class="ui-subtitle" style="margin-bottom: 8px;">Booster: [Spacebar]</div>
+                    <div class="custom-slider-track" id="sliderTrack">
+                        <div class="slider-center-marker"></div>
+                        <div class="slider-fill" id="sliderFill"></div>
+                        <div class="slider-thumb" id="sliderThumb"></div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- 3. RIGHT PANEL: Nebula Control & Throttle Slider -->
-        <div class="container">
-            <div style="width: 100%;">
-                <h2 class="panel-title">Nebula Control</h2>
-                <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
-                <button id="estopBtn" onclick="emergencyStop()">EMERGENCY STOP <span class="key-hint" style="background:rgba(0,0,0,0.2); color:#fff;">[Esc]</span></button>
-                <div id="status">Status: Disconnected</div>
-            </div>
-
-            <div class="slider-section">
-                <label>Throttle (Y): <span id="yVal">0</span></label>
-                <div class="booster-label">Booster: [Spacebar]</div>
-                <div class="custom-slider-track" id="sliderTrack">
-                    <div class="slider-center-marker"></div>
-                    <div class="slider-fill" id="sliderFill"></div>
-                    <div class="slider-thumb" id="sliderThumb"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </body>
 
     <script>
         let bluetoothDevice;
