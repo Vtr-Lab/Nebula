@@ -29,7 +29,7 @@
     :root {
         --color-title: #fc7208;          /* Bright Orange for Main Titles */
         --color-subtitle: #d4840d;       /* Amber/Orange for Subtitles & Section Labels */
-        --color-accent: #1c87c9;         /* Cool Blue for Metrics, Hints & Status */
+        --color-accent: #1c87c9;         /* Cool Blue for Metrics */
     }
 
     .ui-title {
@@ -122,7 +122,7 @@
     #status {
         margin-top: 5px;
         font-size: 13px;
-        color: var(--color-accent);
+        color: #ffffff; /* Set to white as requested */
     }
 
     .telemetry-box {
@@ -211,6 +211,7 @@
     .turn-buttons button {
         margin: 0;
         background-color: #37474f;
+        color: #ffffff; /* Turning buttons text white */
         font-size: 16px;
         flex: 1;
         height: 100%;
@@ -228,7 +229,7 @@
         background: rgba(0,0,0,0.3);
         padding: 2px 6px;
         border-radius: 4px;
-        color: var(--color-accent);
+        color: #ffffff; /* Default hints set to white */
     }
 
     .quick-presets-grid, .presets-container {
@@ -239,6 +240,7 @@
     }
     .quick-btn {
         background-color: #2e7d32;
+        color: #ffffff; /* Quick preset numbers text white */
         font-size: 13px;
         padding: 8px 4px;
         margin: 0;
@@ -269,7 +271,7 @@
         align-items: center;
         margin-bottom: 3px;
         font-size: 10px;
-        color: var(--color-accent);
+        color: #ffffff; /* LED matrix preview header text white */
     }
 
     .mini-grid {
@@ -396,7 +398,7 @@
         left: 0%;
     }
 
-    /* Pitch & Roll (Orange & Yellow Border) */
+    /* Pitch & Roll */
     .bar-center-marker {
         position: absolute;
         left: 50%;
