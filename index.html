@@ -167,7 +167,7 @@
             width: 100%;
             align-items: center;
         }
-        .turn-group label {
+        .subtitle label {
             font-size: 14px;
             color: #ff8a65;
             display: block;
@@ -335,7 +335,6 @@
             }
         }
         .metric-group { margin-bottom: 20px; text-align: left; }
-        .metric-label { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; color: #444; margin-bottom: 5px; }
         .bar-container { background-color: #e9ecef; border-radius: 6px; height: 16px; width: 100%; overflow: hidden; position: relative; }
         .bar-fill { height: 100%; width: 0%; transition: width 0.1s ease-in-out; border-radius: 6px; }
         #distance-fill { background-color: #28a745; }
@@ -371,7 +370,7 @@
         <!-- 2. MIDDLE PANEL: Steering Control & Live Telemetry -->
         <div class="container">
             <h3 class="panel-title">Steering & Quick Display</h3>
-            <div class="turn-group">
+            <div class="subtitle">
                 <label>Turning Direction</label>
                 <div class="turn-buttons">
                     <button id="leftBtn">&#9664; Left <span class="key-hint">[A] [&larr;]</span></button>
@@ -409,7 +408,7 @@
             </div>
                         <!-- Distance Section -->
             <div class="metric-group">
-                <div class="metric-label">
+                <div class="subtitle">
                     <span>Distance</span>
                     <span id="distance-val">-- cm</span>
                 </div>
@@ -420,7 +419,7 @@
             
             <!-- Pitch Section -->
             <div class="metric-group">
-                <div class="metric-label">
+                <div class="subtitle">
                     <span>Pitch (Tilt)</span>
                     <span id="pitch-val">--°</span>
                 </div>
@@ -431,7 +430,7 @@
             
             <!-- Roll Section -->
             <div class="metric-group">
-                <div class="metric-label">
+                <div class="subtitle">
                     <span>Roll (Tilt)</span>
                     <span id="roll-val">--°</span>
                 </div>
