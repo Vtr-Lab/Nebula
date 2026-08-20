@@ -24,10 +24,16 @@
     }
 
     /* ==========================================
-       2. TYPOGRAPHY HIERARCHY
+       2. TYPOGRAPHY & COLOR PALETTE
        ========================================== */
+    :root {
+        --color-title: #fc7208;          /* Bright Orange for Main Titles */
+        --color-subtitle: #d4840d;       /* Amber/Orange for Subtitles & Section Labels */
+        --color-accent: #1c87c9;         /* Cool Blue for Metrics, Hints & Status */
+    }
+
     .ui-title {
-        color: #ff8a65;
+        color: var(--color-title);
         font-size: 18px;
         font-weight: bold;
         margin: 0 0 2px 0;
@@ -35,7 +41,7 @@
 
     .ui-subtitle {
         font-size: 13px;
-        color: ##1c87c9; /* Brighter accent color */
+        color: var(--color-subtitle);
         font-weight: 600;
         margin-bottom: 12px;
         display: block;
@@ -43,7 +49,7 @@
 
     .section-label {
         font-size: 13px;
-        color: #ffd54f; /* Brighter accent color */
+        color: var(--color-subtitle);
         font-weight: 600;
         margin-bottom: 6px;
         display: block;
@@ -71,7 +77,7 @@
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        justify-content: space-between; /* Aligns tops and bottoms uniformly */
+        justify-content: space-between;
         align-items: center;
         gap: 12px;
         border: 1px solid #333;
@@ -80,7 +86,7 @@
     @media (min-width: 900px) {
         .dashboard {
             flex-direction: row;
-            align-items: stretch; /* Forces all 3 boxes to stretch to the tallest height */
+            align-items: stretch;
             justify-content: center;
         }
         .dashboard-box {
@@ -116,7 +122,7 @@
     #status {
         margin-top: 5px;
         font-size: 13px;
-        color: #ffd54f;
+        color: var(--color-accent);
     }
 
     .telemetry-box {
@@ -179,7 +185,7 @@
         width: 68px;
         height: 36px;
         background: #ff5722;
-        border: 2px solid #ff8a65;
+        border: 2px solid #fc7208;
         border-radius: 18px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.6);
         transform: translate(-50%, -50%);
@@ -222,7 +228,7 @@
         background: rgba(0,0,0,0.3);
         padding: 2px 6px;
         border-radius: 4px;
-        color: #ffd54f;
+        color: var(--color-accent);
     }
 
     .quick-presets-grid, .presets-container {
@@ -263,7 +269,7 @@
         align-items: center;
         margin-bottom: 3px;
         font-size: 10px;
-        color: #ffd54f;
+        color: var(--color-accent);
     }
 
     .mini-grid {
@@ -313,7 +319,7 @@
     .matrix-cell.active {
         background-color: #ff5722;
         box-shadow: 0 0 4px #ff5722;
-        border-color: #ff8a65;
+        border-color: var(--color-title);
     }
 
     .controls-row {
@@ -334,7 +340,7 @@
     }
 
     /* ==========================================
-       5. THICKER METRIC BARS & NODES
+       5. METRIC BARS & NODES
        ========================================== */
     .metric-group { 
         margin-bottom: 12px; 
@@ -346,20 +352,19 @@
         justify-content: space-between; 
         font-size: 13px; 
         font-weight: bold; 
-        color: #ffd54f; /* Brighter header color */
+        color: var(--color-accent); 
         margin-bottom: 4px; 
     }
     .bar-container { 
         background-color: #222; 
         border-radius: 8px; 
-        height: 22px; /* Thicker bar height */
+        height: 22px; 
         width: 100%; 
         overflow: visible; 
         position: relative; 
         border: 1px solid #444; 
     }
 
-    /* Common Custom Bar Node */
     .bar-node {
         position: absolute;
         top: 50%;
@@ -373,13 +378,13 @@
         transition: left 0.1s ease-in-out;
     }
 
-    /* Distance Bar Styles (0 to 20 cm) - Dark Rich Blue & Tiffany Border */
+    /* Distance Bar (Dark Blue & Tiffany Border) */
     #distance-fill {
         position: absolute;
         left: 0;
         top: 0;
         bottom: 0;
-        background-color: #1565c0; /* Dark rich blue */
+        background-color: #1565c0;
         border-radius: 7px 0 0 7px;
         width: 0%;
         transition: width 0.1s ease-in-out;
@@ -387,11 +392,11 @@
     }
     #distance-node {
         background-color: #1565c0;
-        border: 2px solid #1de9b6; /* Tiffany-like border */
+        border: 2px solid #1de9b6;
         left: 0%;
     }
 
-    /* Pitch & Roll Center-Relative Styles - Orange & Yellow Border */
+    /* Pitch & Roll (Orange & Yellow Border) */
     .bar-center-marker {
         position: absolute;
         left: 50%;
@@ -406,13 +411,13 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        background-color: #ff5722; /* Orange fill */
+        background-color: #ff5722;
         z-index: 2;
         transition: all 0.1s ease-in-out;
     }
     #pitch-node, #roll-node {
         background-color: #ff5722;
-        border: 2px solid #ffeb3b; /* Yellow border */
+        border: 2px solid #ffeb3b;
         left: 50%;
     }
 </style>
