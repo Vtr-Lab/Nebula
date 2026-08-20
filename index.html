@@ -167,7 +167,7 @@
             width: 100%;
             align-items: center;
         }
-        .subtitle label {
+        .turn-group label {
             font-size: 14px;
             color: #ff8a65;
             display: block;
@@ -335,6 +335,7 @@
             }
         }
         .metric-group { margin-bottom: 20px; text-align: left; }
+        .metric-label { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; color: #444; margin-bottom: 5px; }
         .bar-container { background-color: #e9ecef; border-radius: 6px; height: 16px; width: 100%; overflow: hidden; position: relative; }
         .bar-fill { height: 100%; width: 0%; transition: width 0.1s ease-in-out; border-radius: 6px; }
         #distance-fill { background-color: #28a745; }
@@ -370,7 +371,7 @@
         <!-- 2. MIDDLE PANEL: Steering Control & Live Telemetry -->
         <div class="container">
             <h3 class="panel-title">Steering & Quick Display</h3>
-            <div class="subtitle">
+            <div class="turn-group">
                 <label>Turning Direction</label>
                 <div class="turn-buttons">
                     <button id="leftBtn">&#9664; Left <span class="key-hint">[A] [&larr;]</span></button>
@@ -408,7 +409,7 @@
             </div>
                         <!-- Distance Section -->
             <div class="metric-group">
-                <div class="subtitle">
+                <div class="metric-label">
                     <span>Distance</span>
                     <span id="distance-val">-- cm</span>
                 </div>
@@ -419,7 +420,7 @@
             
             <!-- Pitch Section -->
             <div class="metric-group">
-                <div class="subtitle">
+                <div class="metric-label">
                     <span>Pitch (Tilt)</span>
                     <span id="pitch-val">--°</span>
                 </div>
@@ -430,7 +431,7 @@
             
             <!-- Roll Section -->
             <div class="metric-group">
-                <div class="subtitle">
+                <div class="metric-label">
                     <span>Roll (Tilt)</span>
                     <span id="roll-val">--°</span>
                 </div>
@@ -809,29 +810,16 @@
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bluetoothCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-              // Expected ESP32 telemetry string format: "distance,pitch,roll" (e.g. "12.5,1.2,-0.5")
+                // Expected ESP32 telemetry string format: "T:pitch,roll,battery" (e.g. "T:1.2,-0.5,14.8")
                 await bluetoothCharacteristic.startNotifications();
                 bluetoothCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
                     const value = event.target.value;
                     const text = new TextDecoder().decode(value);
-                    
-                    let parts = text.split(',');
-                    if (parts.length >= 3) {
-                        let distance = parts[0].trim();
-                        let pitch = parts[1].trim();
-                        let roll = parts[2].trim();
-                        
-                        // Update dashboard elements
-                        if (document.getElementById('telemetryPitch')) {
-                            document.getElementById('telemetryPitch').innerText = pitch + '°';
-                        }
-                        if (document.getElementById('telemetryRoll')) {
-                            document.getElementById('telemetryRoll').innerText = roll + '°';
-                        }
-                        // If you have a distance display element in your HTML:
-                        if (document.getElementById('telemetryDistance')) {
-                            document.getElementById('telemetryDistance').innerText = distance + ' cm';
-                        }
+                    if (text.startsWith("T:")) {
+                        let parts = text.substring(2).split(',');
+                        if (parts[0]) document.getElementById('telemetryPitch').innerText = parts[0] + '°';
+                        if (parts[1]) document.getElementById('telemetryRoll').innerText = parts[1] + '°';
+                        if (parts[2]) document.getElementById('telemetryBattery').innerText = parts[2] + 'V';
                     }
                 });
 
