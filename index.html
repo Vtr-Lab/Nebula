@@ -30,19 +30,24 @@
         color: #ff8a65;
         font-size: 18px;
         font-weight: bold;
-        margin: 0 0 5px 0;
+        margin: 0 0 2px 0;
     }
 
     .ui-subtitle {
         font-size: 12px;
-        color: #b0bec5;
-        font-weight: bold;
-        margin-bottom: 8px;
-        background: rgba(255, 138, 101, 0.1);
-        padding: 3px 10px;
-        border-radius: 4px;
-        border: 1px solid rgba(255, 138, 101, 0.2);
-        display: inline-block;
+        color: #999;
+        font-weight: 500;
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .section-label {
+        font-size: 13px;
+        color: #ff8a65;
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: block;
+        letter-spacing: 0.3px;
     }
 
     /* ==========================================
@@ -112,10 +117,6 @@
         margin-top: 5px;
         font-size: 13px;
         color: #b0bec5;
-    }
-    .connected {
-        color: #ffb74d !important;
-        font-weight: bold;
     }
 
     .telemetry-box {
@@ -193,13 +194,6 @@
         width: 100%;
         align-items: center;
     }
-    .turn-group label {
-        font-size: 14px;
-        color: #f0f0f0;
-        display: block;
-        margin-bottom: 6px;
-        font-weight: 500;
-    }
     .turn-buttons {
         display: flex;
         gap: 12px;
@@ -224,9 +218,9 @@
     .turn-buttons button:hover { background-color: #455a64; }
 
     .key-hint {
-        font-size: 11px;
+        font-size: 10px;
         background: rgba(0,0,0,0.3);
-        padding: 3px 8px;
+        padding: 2px 6px;
         border-radius: 4px;
         color: #b0bec5;
     }
@@ -239,8 +233,8 @@
     }
     .quick-btn {
         background-color: #2e7d32;
-        font-size: 14px;
-        padding: 10px 4px;
+        font-size: 13px;
+        padding: 8px 4px;
         margin: 0;
         border-radius: 8px;
         font-weight: bold;
@@ -252,21 +246,24 @@
         width: 100%;
     }
 
+    /* Smaller text styles for matrix preview / preset cards */
     .preset-card {
         background-color: #222;
         border: 1px solid #444;
         border-radius: 8px;
-        padding: 8px;
+        padding: 6px;
         text-align: center;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        font-size: 11px;
     }
     .preset-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 4px;
+        margin-bottom: 3px;
+        font-size: 10px;
     }
 
     .mini-grid {
@@ -274,11 +271,11 @@
         grid-template-columns: repeat(8, 1fr);
         gap: 1px;
         background: #000;
-        padding: 3px;
-        border-radius: 4px;
-        margin: 4px auto;
-        width: 52px;
-        height: 52px;
+        padding: 2px;
+        border-radius: 3px;
+        margin: 3px auto;
+        width: 44px;
+        height: 44px;
         cursor: pointer;
     }
     .mini-cell {
@@ -289,9 +286,9 @@
 
     .btn-save {
         background-color: #c62828;
-        padding: 6px 4px;
-        font-size: 11px;
-        margin: 4px 0 0 0;
+        padding: 4px 2px;
+        font-size: 10px;
+        margin: 3px 0 0 0;
         border-radius: 4px;
         width: 100%;
     }
@@ -335,9 +332,9 @@
         width: 100%;
         font-size: 13px;
     }
-    .metric-group { margin-bottom: 20px; text-align: left; }
-    .metric-label { display: flex; justify-content: space-between; font-size: 14px; font-weight: bold; color: #f0f0f0; margin-bottom: 5px; }
-    .bar-container { background-color: #222; border-radius: 6px; height: 16px; width: 100%; overflow: hidden; position: relative; border: 1px solid #444; }
+    .metric-group { margin-bottom: 14px; text-align: left; }
+    .metric-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; color: #f0f0f0; margin-bottom: 4px; }
+    .bar-container { background-color: #222; border-radius: 6px; height: 14px; width: 100%; overflow: hidden; position: relative; border: 1px solid #444; }
     .bar-fill { height: 100%; width: 0%; transition: width 0.1s ease-in-out; border-radius: 6px; }
     #distance-fill { background-color: #28a745; }
     #pitch-fill { background-color: #17a2b8; }
@@ -345,130 +342,130 @@
 </style>
 </head>
     <body>
-    
-        <div class="dashboard">
-    
-            <!-- ================= 1. LEFT PANEL: LED Matrix Designer ================= -->
-            <div class="dashboard-box">
-                <h2 class="ui-title">LED Matrix Designer</h2>
-                <div class="ui-subtitle">Pattern & Animation Studio</div>
-                
-                <div class="matrix-grid" id="matrixGrid"></div>
-    
-                <div class="controls-row">
-                    <select id="animMode" onchange="saveCurrentState()">
-                        <option value="static">Static</option>
-                        <option value="blink">Flash (Blink)</option>
-                        <option value="refresh">Sweep (Refresh)</option>
-                        <option value="pulse">Pulse</option>
-                        <option value="inside-out">Inside Out</option>
-                        <option value="outside-in">Outside In</option>
-                    </select>
-                    <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 14px; margin:0;">Clear</button>
-                </div>
-    
-                <div class="ui-subtitle" style="margin-top: 10px;">Save Presets</div>
-                <div class="presets-container" id="presetsContainer"></div>
+
+    <div class="dashboard">
+
+        <!-- ================= 1. LEFT PANEL: LED Matrix Designer ================= -->
+        <div class="dashboard-box">
+            <h2 class="ui-title">LED Matrix Designer</h2>
+            <span class="ui-subtitle">Pattern & Animation Studio</span>
+            
+            <div class="matrix-grid" id="matrixGrid"></div>
+
+            <div class="controls-row">
+                <select id="animMode" onchange="saveCurrentState()">
+                    <option value="static">Static</option>
+                    <option value="blink">Flash (Blink)</option>
+                    <option value="refresh">Sweep (Refresh)</option>
+                    <option value="pulse">Pulse</option>
+                    <option value="inside-out">Inside Out</option>
+                    <option value="outside-in">Outside In</option>
+                </select>
+                <button onclick="clearMatrix()" style="background-color: #424242; width: auto; padding: 8px 14px; margin:0;">Clear</button>
             </div>
-    
-            <!-- ================= 2. MIDDLE PANEL: Steering, Telemetry & Metrics ================= -->
-            <div class="dashboard-box">
-                <h2 class="ui-title">Steering & Quick Display</h2>
-                <div class="ui-subtitle">Navigation & Feedback</div>
-                
-                <div class="turn-group">
-                    <label>Turning Direction</label>
-                    <div class="turn-buttons">
-                        <button id="leftBtn">&#9664; Left <span class="key-hint">[A] [&larr;]</span></button>
-                        <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
-                    </div>
+
+            <span class="section-label" style="margin-top: 6px;">Save Presets</span>
+            <div class="presets-container" id="presetsContainer"></div>
+        </div>
+
+        <!-- ================= 2. MIDDLE PANEL: Steering, Telemetry & Metrics ================= -->
+        <div class="dashboard-box">
+            <h2 class="ui-title">Steering & Quick Display</h2>
+            <span class="ui-subtitle">Navigation & Feedback</span>
+            
+            <div class="turn-group">
+                <span class="section-label">Turning Direction</span>
+                <div class="turn-buttons">
+                    <button id="leftBtn">&#9664; Left <span class="key-hint">[A] [&larr;]</span></button>
+                    <button id="rightBtn">Right &#9654; <span class="key-hint">[D] [&rarr;]</span></button>
                 </div>
-    
-                <!-- IMU & Battery Telemetry Box -->
-                <div class="telemetry-box">
-                    <div class="ui-subtitle" style="margin-bottom: 8px;">Live Telemetry</div>
-                    <div style="display: flex; justify-content: space-between; gap: 6px;">
-                        <div style="flex: 1; background: #161616; padding: 8px 4px; border-radius: 6px; border: 1px solid #333;">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Pitch</div>
-                            <strong id="telemetryPitch" style="color: #fff; font-size: 15px;">0.0°</strong>
-                        </div>
-                        <div style="flex: 1; background: #161616; padding: 8px 4px; border-radius: 6px; border: 1px solid #333;">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Roll</div>
-                            <strong id="telemetryRoll" style="color: #fff; font-size: 15px;">0.0°</strong>
-                        </div>
-                        <div style="flex: 1; background: #161616; padding: 8px 4px; border-radius: 6px; border: 1px solid #333;">
-                            <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Battery</div>
-                            <strong id="telemetryBattery" style="color: #fff; font-size: 15px;">--V</strong>
-                        </div>
+            </div>
+
+            <!-- IMU & Battery Telemetry Box -->
+            <div class="telemetry-box">
+                <span class="ui-subtitle" style="margin-bottom: 6px;">Live Telemetry</span>
+                <div style="display: flex; justify-content: space-between; gap: 6px;">
+                    <div style="flex: 1; background: #161616; padding: 6px 4px; border-radius: 6px; border: 1px solid #333;">
+                        <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Pitch</div>
+                        <strong id="telemetryPitch" style="color: #fff; font-size: 14px;">0.0°</strong>
                     </div>
-                </div>
-    
-                <label style="margin-top: 10px;">Quick Presets (1-6)</label>
-                <div class="quick-presets-grid">
-                    <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
-                    <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="padding:1px 4px;">[2]</span></button>
-                    <button class="quick-btn" onclick="playPreset(3)">P3 <span class="key-hint" style="padding:1px 4px;">[3]</span></button>
-                    <button class="quick-btn" onclick="playPreset(4)">P4 <span class="key-hint" style="padding:1px 4px;">[4]</span></button>
-                    <button class="quick-btn" onclick="playPreset(5)">P5 <span class="key-hint" style="padding:1px 4px;">[5]</span></button>
-                    <button class="quick-btn" onclick="playPreset(6)">P6 <span class="key-hint" style="padding:1px 4px;">[6]</span></button>
-                </div>
-    
-                <!-- Distance Section -->
-                <div class="metric-group" style="width: 100%; margin-top: 10px;">
-                    <div class="metric-label">
-                        <span>Distance</span>
-                        <span id="distance-val">-- cm</span>
+                    <div style="flex: 1; background: #161616; padding: 6px 4px; border-radius: 6px; border: 1px solid #333;">
+                        <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Roll</div>
+                        <strong id="telemetryRoll" style="color: #fff; font-size: 14px;">0.0°</strong>
                     </div>
-                    <div class="bar-container">
-                        <div class="bar-fill" id="distance-fill"></div>
-                    </div>
-                </div>
-                
-                <!-- Pitch Section -->
-                <div class="metric-group" style="width: 100%;">
-                    <div class="metric-label">
-                        <span>Pitch (Tilt)</span>
-                        <span id="pitch-val">--°</span>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar-fill" id="pitch-fill"></div>
-                    </div>
-                </div>
-                
-                <!-- Roll Section -->
-                <div class="metric-group" style="width: 100%;">
-                    <div class="metric-label">
-                        <span>Roll (Tilt)</span>
-                        <span id="roll-val">--°</span>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar-fill" id="roll-fill"></div>
+                    <div style="flex: 1; background: #161616; padding: 6px 4px; border-radius: 6px; border: 1px solid #333;">
+                        <div style="font-size: 10px; color: #999; margin-bottom: 2px;">Battery</div>
+                        <strong id="telemetryBattery" style="color: #fff; font-size: 14px;">--V</strong>
                     </div>
                 </div>
             </div>
-    
-            <!-- ================= 3. RIGHT PANEL: Nebula Control & Throttle ================= -->
-            <div class="dashboard-box">
-                <h2 class="ui-title">Nebula Control</h2>
-                <div class="ui-subtitle">System & Throttle</div>
-    
-                <div style="width: 100%;">
-                    <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
-                    <button id="estopBtn" onclick="emergencyStop()">EMERGENCY STOP <span class="key-hint" style="background:rgba(0,0,0,0.2); color:#fff;">[Esc]</span></button>
-                    <div id="status">Status: Disconnected</div>
+
+            <span class="section-label" style="margin-top: 6px;">Quick Presets (1-6)</span>
+            <div class="quick-presets-grid">
+                <button class="quick-btn" onclick="playPreset(1)">P1 <span class="key-hint" style="padding:1px 4px;">[1]</span></button>
+                <button class="quick-btn" onclick="playPreset(2)">P2 <span class="key-hint" style="padding:1px 4px;">[2]</span></button>
+                <button class="quick-btn" onclick="playPreset(3)">P3 <span class="key-hint" style="padding:1px 4px;">[3]</span></button>
+                <button class="quick-btn" onclick="playPreset(4)">P4 <span class="key-hint" style="padding:1px 4px;">[4]</span></button>
+                <button class="quick-btn" onclick="playPreset(5)">P5 <span class="key-hint" style="padding:1px 4px;">[5]</span></button>
+                <button class="quick-btn" onclick="playPreset(6)">P6 <span class="key-hint" style="padding:1px 4px;">[6]</span></button>
+            </div>
+
+            <!-- Distance Section -->
+            <div class="metric-group" style="width: 100%; margin-top: 6px;">
+                <div class="metric-label">
+                    <span>Distance</span>
+                    <span id="distance-val">-- cm</span>
                 </div>
-    
-                <div class="slider-section">
-                    <label>Throttle (Y): <span id="yVal">0</span></label>
-                    <div class="ui-subtitle" style="margin-bottom: 8px;">Booster: [Spacebar]</div>
-                    <div class="custom-slider-track" id="sliderTrack">
-                        <div class="slider-center-marker"></div>
-                        <div class="slider-fill" id="sliderFill"></div>
-                        <div class="slider-thumb" id="sliderThumb"></div>
-                    </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="distance-fill"></div>
+                </div>
+            </div>
+            
+            <!-- Pitch Section -->
+            <div class="metric-group" style="width: 100%;">
+                <div class="metric-label">
+                    <span>Pitch (Tilt)</span>
+                    <span id="pitch-val">--°</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="pitch-fill"></div>
+                </div>
+            </div>
+            
+            <!-- Roll Section -->
+            <div class="metric-group" style="width: 100%;">
+                <div class="metric-label">
+                    <span>Roll (Tilt)</span>
+                    <span id="roll-val">--°</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-fill" id="roll-fill"></div>
                 </div>
             </div>
         </div>
+
+        <!-- ================= 3. RIGHT PANEL: Nebula Control & Throttle ================= -->
+        <div class="dashboard-box">
+            <h2 class="ui-title">Nebula Control</h2>
+            <span class="ui-subtitle">System & Throttle</span>
+
+            <div style="width: 100%;">
+                <button id="connectBtn" onclick="connectBluetooth()">Connect ESP32</button>
+                <button id="estopBtn" onclick="emergencyStop()">EMERGENCY STOP <span class="key-hint" style="background:rgba(0,0,0,0.2); color:#fff;">[Esc]</span></button>
+                <div id="status">Status: Disconnected</div>
+            </div>
+
+            <div class="slider-section">
+                <label>Throttle (Y): <span id="yVal">0</span></label>
+                <span class="ui-subtitle" style="margin-bottom: 6px;">Booster: [Spacebar]</span>
+                <div class="custom-slider-track" id="sliderTrack">
+                    <div class="slider-center-marker"></div>
+                    <div class="slider-fill" id="sliderFill"></div>
+                    <div class="slider-thumb" id="sliderThumb"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     </body>
 
     <script>
